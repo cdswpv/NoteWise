@@ -3,7 +3,7 @@
     "name": "NoteWise",
     "description": "Base Level Extension",
     "version": "1.0.1",
-    "permissions": ["storage", "tabs"],
+    "permissions": ["storage", "tabs", "activeTab", "scripting"],
   
     "action" : 
     {
