@@ -1,4 +1,5 @@
 document.getElementById("myButton").addEventListener("click", getText);
+document.getElementById("x").addEventListener("click", closeElement);
 
 function getText() {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -6,49 +7,26 @@ function getText() {
     console.log(tab.url);
 
     fetch(tab.url)
-      .then(response => response.text())
-      .then(html => {
-        const concatenatedText = parseHTML(html);
-        const paragraphs = createPara(concatenatedText);
-        // Update the "demo" element
-        document.getElementById("demo").textContent = paragraphs.join("\n\n"); // Join paragraphs with double line breaks
-      });
+        .then(response => response.text())
+        .then(html => {
+          parseHTML(html);
+        });
 
     function parseHTML(html) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
-      const paragraphs = doc.querySelectorAll('p, td, ul, li');
-      let concatenatedText = '';
+
+      const paragraphs = doc.querySelectorAll('p', 'td');
       paragraphs.forEach(paragraph => {
-        concatenatedText += paragraph.textContent + ' '; // Add a space between paragraphs
+        console.log(paragraph.textContent);
       });
-      return concatenatedText;
-    }
-
-    function createPara(concatenatedText) {
-      const sentences = concatenatedText.split(/[.!?]/);
-
-      const paragraphs = [];
-
-      let currentParagraph = '';
-
-      for (let i = 0; i < sentences.length; i++) {
-        const sentence = sentences[i].trim();
-
-        if (currentParagraph.split('.').length < 6) {
-          currentParagraph += sentence + '.';
-        } else {
-          paragraphs.push(currentParagraph);
-
-          currentParagraph = sentence + ' ';
-        }
-      }
-
-      if (currentParagraph.trim() !== '') {
-        paragraphs.push(currentParagraph);
-      }
-
-      return paragraphs;
     }
   });
 }
+
+function closeElement() {
+  const element = document.getElementById('x');
+  element.style.display = 'none';
+  window.close();
+}
+
