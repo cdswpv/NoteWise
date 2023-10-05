@@ -18,6 +18,11 @@ body h1
   text-align: center;
 }
 
+#myButton
+{
+  width: 100px;
+  height: 50px;
+}
 
 #x {
     position: absolute;
