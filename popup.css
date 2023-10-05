@@ -2,7 +2,7 @@
 body {
     width: 300px;
     height: 200px;
-    background-color: plum;
+    background-color: rgb(0, 0, 0);
     padding: 10px;
     margin: 10px;
 
@@ -12,16 +12,43 @@ body {
 
 body h1
 {
-  font-size: large;
-  font-family: 'Courier New', Courier, monospace;
-  color: white;
-  text-align: center;
+  font-size: 25px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  color: rgb(255, 224, 255);
+  position: relative;
 }
 
 #myButton
 {
-  width: 100px;
-  height: 50px;
+  --glow-color: rgb(255, 224, 255);
+  --glow-spread: rgb(248, 114, 248);
+  --button-color: rgb(143, 93, 143);
+  background-color: var(--button-color);
+  border: .25em solid var(--glow-color);
+  color: var(--glow-color);
+  font-size: 11px;
+  font-weight: bold;
+  padding: 1em 3em;
+  position: relative;
+  transition: all 1s;
+  border-radius: 1em;
+  outline: none;
+
+  box-shadow: 0 0 1em .25em var(--glow-color),
+  0 0 4em 1em var(--glow-spread), 
+  inset 0 0 .75em .25em var(--glow-color);
+
+  text-shadow: 0 0 .5em var(--glow-color),
+}
+
+#myButton:hover{
+  color: var(--button-color);
+  background-color: var(--glow-color);
+  box-shadow: 0 0 1em .25em var(--glow-color),
+  0 0 4em 2em var(--glow-spread),
+  inset 0 0 .75em .25em var(--glow-color);
+
+
 }
 
 #x {
