@@ -5,6 +5,7 @@ function getText() {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     var tab = tabs[0];
     console.log(tab.url);
+    chrome.runtime.sendMessage({ type: "url", url: tab.url });
 
     fetch(tab.url)
         .then(response => response.text())
