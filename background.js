@@ -1,31 +1,39 @@
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-    if (message.type === "url") {
-      const url = message.url;
-      const apiKey = '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';
-  
-      try {
-        const response = await fetch('https://api.openai.com/v1/engines/gpt-3.5-turbo/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-          },
-          body: JSON.stringify({
-            prompt: `Summarize the following URL: ${url}`,
-            max_tokens: 50, // Adjust the max_tokens as needed
-          }),
-        });
-  
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-  
-        const data = await response.json();
-        const summary = data.choices[0].text;
-  
-        chrome.tabs.sendMessage(sender.tab.id, { type: "summary", summary });
-      } catch (error) {
-        console.log('Error:', error);
+  if (message.type === "text") {
+    const paragraphArray = message.textContent;
+    
+    try {
+      const response = await fetch(chrome.runtime.getURL('config.json'));
+      const config = await response.json();
+      const apiKey = config.apiKey;
+
+      const apiResponse = await fetch('https://api.openai.com/v1/engines/gpt-3.5-turbo/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          prompt: paragraphArray.join("\n"),
+          max_tokens: 50, 
+        }),
+      });
+
+      if (!apiResponse.ok) {
+        throw new Error(`HTTP error! Status: ${apiResponse.status}`);
       }
+
+      const apiData = await apiResponse.json();
+      const apiSummary = apiData.choices[0].text;
+
+      // Send the API summary back to content.js
+      chrome.runtime.sendMessage({ type: "summary", summary: apiSummary });
+    } catch (error) {
+      console.log('Error:', error);
+      const errorMessage = 'Error occurred during summarization.';
+      
+      // Send an error message back to content.js
+      chrome.runtime.sendMessage({ type: "summary", summary: errorMessage });
     }
-  });
+  }
+});
