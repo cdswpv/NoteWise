@@ -1,24 +1,29 @@
 {
-    "manifest_version": 3,
-    "name": "NoteWise",
-    "description": "Base Level Extension",
-    "version": "1.0.1",
-    "permissions": ["storage", "tabs", "activeTab", "scripting"],
+  "manifest_version": 3,
+  "name": "NoteWise",
+  "description": "Base Level Extension",
+  "version": "1.0.1",
+  "permissions": ["storage", "tabs", "activeTab", "scripting"],
   
-    "action" : 
-    {
-      "default_popup" : "popup.html"
-    },
+  "action": {
+    "default_popup": "popup.html"
+  },
 
-    "content_scripts": 
-    [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["content.js"]
-      }
-    ],
-    "background":{
-      "service_worker": "background.js" 
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["dist/NoteWise.bundle.js"]
     }
-    
+  ],
+
+  "background": {
+    "service_worker": "background.js" 
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["node_modules/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

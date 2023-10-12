@@ -1,3 +1,6 @@
+/*
+
+
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === "text") {
     const paragraphArray = message.textContent;
@@ -15,7 +18,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         },
         body: JSON.stringify({
           prompt: paragraphArray.join("\n"),
-          max_tokens: 50, 
+          max_tokens: 40000, 
         }),
       });
 
@@ -37,3 +40,4 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     }
   }
 });
+*/

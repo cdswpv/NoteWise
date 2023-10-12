@@ -1,56 +1,76 @@
-document.getElementById("myButton").addEventListener("click", getText);
-document.getElementById("x").addEventListener("click", closeElement);
+import OpenAI from 'openai';
 
+const openai = new OpenAI({
+  apiKey: process.env.API_KEY,
+  dangerouslyAllowBrowser: true,
+});
 
-let lastRequestTime = 0;
-const requestInterval = 500 * 1000; 
 const paragraphArray = [];
 
 function getText() {
-  const currentTime = Date.now();
-  if (currentTime - lastRequestTime < requestInterval) {
-    console.log('Request throttled. Waiting before sending another request.');
-  } else {
-    lastRequestTime = currentTime;
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    const tab = tabs[0];
+    const tabURL = tab.url;
 
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      var tab = tabs[0];
+    fetch(tabURL)
+      .then((response) => response.text())
+      .then((html) => {
+        parseHTML(html);
+      });
 
-      fetch(tab.url)
-        .then(response => response.text())
-        .then(html => {
-          parseHTML(html);
-        });
+    function parseHTML(html) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
 
-      function parseHTML(html) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
+      const paragraphs = doc.querySelectorAll('p, td, ul');
 
-        const paragraphs = doc.querySelectorAll('p, td, ul');
+      paragraphs.forEach((paragraph) => {
+        paragraphArray.push(paragraph.textContent);
+      });
 
-        paragraphs.forEach(paragraph => {
-          paragraphArray.push(paragraph.textContent);
-          console.log(paragraph.textContent);
-        });
+      // Send the paragraphs to the OpenAI API for summarization
+      const textToSummarize = paragraphArray.join('\n'); // Concatenate paragraphs
 
-        //  send the text content to background.js for summarization
-        chrome.runtime.sendMessage({ type: "text", textContent: paragraphArray });
-      }
+      // Use the OpenAI Chat Completions API to generate a summary
+      generateSummary(textToSummarize);
+    }
+  });
+}
+
+async function generateSummary(text) {
+  // Define the maximum context length for the model
+  const maxContextLength = 4097;
+
+  try {
+    // Check if the text length exceeds the maximum context length
+    if (text.length > maxContextLength) {
+      // If it exceeds the limit, truncate the text to fit within the limit
+      text = text.substring(0, maxContextLength);
+    }
+
+    const response = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        { role: 'system', content: 'You are a helpful assistant.' },
+        { role: 'user', content: text },
+      ],
+      max_tokens: 50,
     });
+
+    const summary = response.choices[0].text;
+    const summaryElement = document.getElementById('summary');
+    if (summaryElement) {
+      summaryElement.textContent = summary;
+    } else {
+      console.error('Element with ID "summary" not found.');
+    }
+  } catch (error) {
+    console.error('Error generating summary: ', error);
   }
 }
 
-
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === "summary") {
-    const summary = message.summary;
-
-    // display the summary
-    const summaryElement = document.getElementById("summary");
-    summaryElement.textContent = summary;
-  }
-});
+document.getElementById('myButton').addEventListener('click', getText);
+document.getElementById('x').addEventListener('click', closeElement);
 
 function closeElement() {
   const element = document.getElementById('x');
