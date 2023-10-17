@@ -1,15 +1,33 @@
 chrome.runtime.onInstalled.addListener(() => {
-  var contextMenuItem = {
-      "id": "summary", 
+  var contextSelection = {
+      "id": "text", 
       "title": "Summarize highlighted text with NoteWise",
       "contexts": ["selection"]
   }
+  var contextImage = {
+    "id": "image", 
+    "title": "Summarize image with NoteWise",
+    "contexts": ["image"]
+}
+  chrome.contextMenus.create(contextSelection);
+  chrome.contextMenus.create(contextImage);
 
-  chrome.contextMenus.create(contextMenuItem);
 
   chrome.contextMenus.onClicked.addListener(function(info, tab){
     //Add code to summarize the info variable, open the content.js file up, and display the summarization
-    console.log("Placeholder for summarization");
+
+    //Displays the text selected 
+    console.log(info)
+    if (info.menuItemId == "text")
+    {
+      console.log("Selected Text: " + info.selectionText)
+    }
+    else if (info.menuItemId == "image")
+    {
+      console.log("Image URL: " + info.srcUrl)
+
+      chrome.tabs.create({url:info.srcUrl})
+    }
   });
 });
 
