@@ -1,3 +1,19 @@
+chrome.runtime.onInstalled.addListener(() => {
+  var contextMenuItem = {
+      "id": "summary", 
+      "title": "Summarize highlighted text with NoteWise",
+      "contexts": ["selection"]
+  }
+
+  chrome.contextMenus.create(contextMenuItem);
+
+  chrome.contextMenus.onClicked.addListener(function(info, tab){
+    //Add code to summarize the info variable, open the content.js file up, and display the summarization
+    console.log("Placeholder for summarization");
+  });
+});
+
+  
 /*
 
 
