@@ -31,6 +31,14 @@ function getText() {
       // Send the paragraphs to the OpenAI API for summarization
       const textToSummarize = paragraphArray.join('\n'); // Concatenate paragraphs
 
+      // Check if the text exceeds the model's maximum token limit (4096 tokens for gpt-3.5-turbo)
+      if (textToSummarize.split(' ').length > 4096) {
+        // If it's too long, truncate it while preserving meaningful content
+        const maxTokens = 4096; // Max tokens for gpt-3.5-turbo
+        const textArray = textToSummarize.split(' ');
+        textToSummarize = textArray.slice(0, maxTokens).join(' ');
+      }
+      console.log(textToSummarize);
       // Use the OpenAI Chat Completions API to generate a summary
       generateSummary(textToSummarize);
     }
@@ -38,31 +46,29 @@ function getText() {
 }
 
 async function generateSummary(text) {
-  // Define the maximum context length for the model
-  const maxContextLength = 4097;
-
   try {
-    // Check if the text length exceeds the maximum context length
-    if (text.length > maxContextLength) {
-      // If it exceeds the limit, truncate the text to fit within the limit
-      text = text.substring(0, maxContextLength);
-    }
-
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
         { role: 'system', content: 'You are a helpful assistant.' },
         { role: 'user', content: text },
       ],
-      max_tokens: 50,
+      max_tokens: 2000,
     });
 
-    const summary = response.choices[0].text;
-    const summaryElement = document.getElementById('summary');
-    if (summaryElement) {
-      summaryElement.textContent = summary;
-    } else {
-      console.error('Element with ID "summary" not found.');
+    console.log(response)
+
+    if (response.hasOwnProperty('choices') && response.choices.length > 0) {
+      const summary = response.choices[0].message.content;
+      const summaryElement = document.getElementById("summary");
+      console.log(summary);
+      if (summaryElement) {
+        summaryElement.textContent = summary; // Update the 'summary' element with the generated summary
+      } else {
+        console.error('Element with ID "summary" not found.');
+      }
+    } else if (response.hasOwnProperty('error')) {
+      console.error('Error from OpenAI API:', response.error.message);
     }
   } catch (error) {
     console.error('Error generating summary: ', error);

@@ -1,4 +1,4 @@
-chrome.runtime.onInstalled.addListener(() => {
+/*chrome.runtime.onInstalled.addListener(() => {
   var contextSelection = {
       "id": "text", 
       "title": "Summarize highlighted text with NoteWise",
