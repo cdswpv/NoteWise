@@ -1,4 +1,11 @@
-/*chrome.runtime.onInstalled.addListener(() => {
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: process.env.API_KEY,
+  dangerouslyAllowBrowser: true,
+});
+
+chrome.runtime.onInstalled.addListener(() => {
   var contextSelection = {
       "id": "text", 
       "title": "Summarize highlighted text with NoteWise",
@@ -21,6 +28,9 @@
     if (info.menuItemId == "text")
     {
       console.log("Selected Text: " + info.selectionText)
+
+      //Generates the summary and places it into the console log
+      generateSummary(info.selectionText)
     }
     else if (info.menuItemId == "image")
     {
@@ -31,10 +41,31 @@
   });
 });
 
-  
+async function generateSummary(text) {
+  try {
+    const response = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        { role: 'system', content: 'You are a helpful assistant.' },
+        { role: 'user', content: text },
+      ],
+      max_tokens: 2000,
+    });
+
+    console.log("initial gpt response: " + response)
+
+    if (response.hasOwnProperty('choices') && response.choices.length > 0) {
+      const summary = response.choices[0].message.content;
+      console.log("summary: " + summary);
+    } 
+    else if (response.hasOwnProperty('error')) {
+      console.error('Error from OpenAI API:', response.error.message);
+    }
+  } catch (error) {
+    console.error('Error generating summary: ', error);
+  }
+}
 /*
-
-
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === "text") {
     const paragraphArray = message.textContent;
