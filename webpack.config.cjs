@@ -5,9 +5,10 @@ module.exports = {
   mode: 'production',
   entry: {
     content: path.resolve(__dirname, 'content.js'),
+    background: path.resolve(__dirname, 'background.js'),
   },
   output: {
-    filename: 'NoteWise.bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
   devtool: 'source-map',
