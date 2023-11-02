@@ -3,9 +3,16 @@
     "name": "NoteWise",
     "description": "Base Level Extension",
     "version": "1.0.1",
-    "permissions": ["storage", "tabs", "activeTab", "scripting"],
-  
-    "action" : 
+    "permissions": ["storage", "tabs", "activeTab", "scripting", "identity", "identity.email"],
+    "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAl/4DB/R4/Faib+qts+XGFm/F4qX/Bcf+H9l4F471YOaDz6ByIbD+1aJZxc1U9Ph36ELIS/1hgurPgwX9x42aiqND/FDdSjeZD5s1cYov2MNpbry2roFv8nroWfXdZcFradNQYQXUAhin/4Kk56SOQGnpXas2lnVgenK5D9J8NYcUf38sZo8fw1pEAhJ6PJbq7QRj6b64nlymWrpw8Wbpr0B2IrwnZAPB9ErA2BUczJRE8/4eQ+XTs2etnrmsFfp/Y5oQtUAQWwmscA8uIMpsYye7y74zSpp49jeAd73WJ/dEwVkMtKbyJslPjxb4iz0h7E41i+GtQ0M98cMEUBNecQIDAQAB",
+    "oauth2":{
+      "client_id":"809053939553-jirmkh6nbhmh3jla3tijdj4kl879i0jh.apps.googleusercontent.com",
+      "scopes": [
+        "profile email",
+        "https://www.googleapis.com/auth/contacts"
+    ]},
+
+    "action": 
     {
       "default_popup" : "popup.html"
     },
