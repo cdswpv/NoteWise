@@ -10,6 +10,8 @@ chrome.runtime.onInstalled.addListener(() => {
       "id": "text", 
       "title": "Summarize highlighted text with NoteWise",
       "contexts": ["selection"]
+  }
+});
 
 const login_API_KEY = "809053939553-6854kil5qm47qqc99a268u63hbcov074.apps.googleusercontent.com";
 let user_sign_in = false;

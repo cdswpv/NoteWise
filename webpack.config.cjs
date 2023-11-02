@@ -6,6 +6,7 @@ module.exports = {
   entry: {
     content: path.resolve(__dirname, 'content.js'),
     background: path.resolve(__dirname, 'background.js'),
+    login: path.resolve(__dirname, 'login.js'),
   },
   output: {
     filename: '[name].bundle.js',
