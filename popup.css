@@ -5,10 +5,18 @@ body {
     background-color: rgb(57, 55, 57);
     padding: 10px;
     margin: 10px;
-
+    color: white;
     display: grid;
     place-content: center;
   }
+
+body h1
+{
+  font-size: 25px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  color: white;
+  position: relative;
+}
 
 #myButton
 {
