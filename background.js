@@ -10,8 +10,36 @@ chrome.runtime.onInstalled.addListener(() => {
       "id": "text", 
       "title": "Summarize highlighted text with NoteWise",
       "contexts": ["selection"]
-  }
-});
+    }
+    var contextImage = {
+      "id": "image", 
+      "title": "Summarize image with NoteWise",
+      "contexts": ["image"]
+    }
+    chrome.contextMenus.create(contextSelection);
+    chrome.contextMenus.create(contextImage);
+  
+  
+    chrome.contextMenus.onClicked.addListener(function(info, tab){
+      //Add code to summarize the info variable, open the content.js file up, and display the summarization
+  
+      //Displays the text selected 
+      console.log(info)
+      if (info.menuItemId == "text")
+      {
+        console.log("Selected Text: " + info.selectionText)
+  
+        //Generates the summary and places it into the console log
+        generateSummary(info.selectionText)
+      }
+      else if (info.menuItemId == "image")
+      {
+        console.log("Image URL: " + info.srcUrl)
+  
+        chrome.tabs.create({url:info.srcUrl})
+      }
+    });
+  });
 
 const login_API_KEY = "809053939553-6854kil5qm47qqc99a268u63hbcov074.apps.googleusercontent.com";
 let user_sign_in = false;
@@ -137,36 +165,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           });
     });
   }
-  var contextImage = {
-    "id": "image", 
-    "title": "Summarize image with NoteWise",
-    "contexts": ["image"]
-}
-  chrome.contextMenus.create(contextSelection);
-  chrome.contextMenus.create(contextImage);
-
-
-  chrome.contextMenus.onClicked.addListener(function(info, tab){
-    //Add code to summarize the info variable, open the content.js file up, and display the summarization
-
-    //Displays the text selected 
-    console.log(info)
-    if (info.menuItemId == "text")
-    {
-      console.log("Selected Text: " + info.selectionText)
-
-      //Generates the summary and places it into the console log
-      generateSummary(info.selectionText)
-    }
-    else if (info.menuItemId == "image")
-    {
-      console.log("Image URL: " + info.srcUrl)
-
-      chrome.tabs.create({url:info.srcUrl})
-    }
-  });
-});
-
+})
 
 async function generateSummary(text) {
   try {
@@ -191,14 +190,4 @@ async function generateSummary(text) {
   } catch (error) {
     console.error('Error generating summary: ', error);
   }
-}
-function loadSignIn()
-{
-  const popupContainer = document.getElementById('popup')
-  popupContainer.innerHTML = '<iframe src="popup.html" width="100%" height="100%"></iframe>';
-}
-
-function loadSignedOut() {
-  const popupContainer = document.getElementById('popup');
-  popupContainer.innerHTML = '<iframe src="login.html" width="100%" height="100%"></iframe>';
 }
