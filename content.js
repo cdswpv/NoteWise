@@ -4,7 +4,32 @@ const openai = new OpenAI({
   apiKey: process.env.API_KEY,
   dangerouslyAllowBrowser: true,
 });
+/*
+function CreateOverlayBox() {
+  console.log("made it to overlay box")
+  const overlay = document.createElement('div');
+  overlay.id = 'custom-overlay';
+  overlay.style.position = 'fixed';
+  overlay.style.top = '0';
+  overlay.style.left = '0';
+  overlay.style.width = '100%';
+  overlay.style.height = '100%';
+  overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+  overlay.style.zIndex = '9999';
+  overlay.style.display = 'flex';
+  overlay.style.justifyContent = 'center';
+  overlay.style.alignItems = 'center';
 
+  document.body.appendChild(overlay);
+}
+chrome.runtime.onConnect.addListener(function(port) {
+  port.onMessage.addListener(function(message) {
+    if (message.action === 'createOverlay') {
+      createOverlayBox();
+    }
+  });
+});
+*/
 const paragraphArray = [];
 
 function getText() {

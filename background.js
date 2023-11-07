@@ -22,7 +22,11 @@ chrome.runtime.onInstalled.addListener(() => {
   
     chrome.contextMenus.onClicked.addListener(function(info, tab){
       //Add code to summarize the info variable, open the content.js file up, and display the summarization
-  
+
+
+      //createOverlay();
+
+      
       //Displays the text selected 
       console.log(info)
       if (info.menuItemId == "text")
@@ -40,7 +44,24 @@ chrome.runtime.onInstalled.addListener(() => {
       }
     });
   });
-
+/*
+  function createOverlay() {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      if (tabs.length > 0) {
+        const tabId = tabs[0].id;
+        console.log("waiting for onupdate");
+        // Wait for the tab to be fully loaded before attempting to connect
+        chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+          if (changeInfo.status === 'complete' && tab.id === tabId) {
+            console.log("sending to content script");
+            const port = chrome.tabs.connect(tabId);
+            port.postMessage({ action: 'createOverlay' });
+          }
+        });
+      }
+    });
+  }
+  */
 const login_API_KEY = "809053939553-6854kil5qm47qqc99a268u63hbcov074.apps.googleusercontent.com";
 let user_sign_in = false;
 
@@ -183,6 +204,7 @@ async function generateSummary(text) {
     if (response.hasOwnProperty('choices') && response.choices.length > 0) {
       const summary = response.choices[0].message.content;
       console.log("summary: " + summary);
+      //createOverlay(summary);
     } 
     else if (response.hasOwnProperty('error')) {
       console.error('Error from OpenAI API:', response.error.message);
