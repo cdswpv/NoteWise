@@ -4,16 +4,18 @@
   <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-  <button id="myButton">Get Text</button>
+  <button id="myButton">Summarize</button>
   <button id="x">Close</button>
-  <div id="summary">
-    
+
+  <div >
+    <p id = "summary"> </p>
+    <button id="copyButton">Copy to Clipboard</button>
+
   </div>
   <!-- Include the bundled JavaScript file from the 'dist' directory and specify type as module -->
   <script type="module" src="dist/content.bundle.js"></script>
   <script type="module" src="dist/background.bundle.js"></script>
-    <button id ="x">X</button>
-    <a class = "start-button"  href="mainApp.html">
+     <a class = "start-button"  href="mainApp.html">
     </a>
     <p id="demo"></p>
     <button id = "Login">Login w/ GOOGLE</button>

@@ -65,3 +65,14 @@ body h1
 
 
 
+#summary {
+  max-height: 200px;  
+  overflow-y: auto;   
+  white-space: pre-wrap; 
+  border: 1px solid #ccc; 
+  padding: 10px;       
+}
+
+
+
+

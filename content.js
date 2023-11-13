@@ -47,14 +47,14 @@ function getText() {
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
 
-      const paragraphs = doc.querySelectorAll('p, td, ul');
+      const paragraphs = doc.querySelectorAll('p, td, ul, div, h1, h2, h3');
 
       paragraphs.forEach((paragraph) => {
         paragraphArray.push(paragraph.textContent);
       });
 
       // Send the paragraphs to the OpenAI API for summarization
-      const textToSummarize = paragraphArray.join('\n'); // Concatenate paragraphs
+      let textToSummarize = "Please provide a concise summary of the core information of the following, ignore any links provided you are acting as a summary tool in a browser extension: " + paragraphArray.join('\n'); // Concatenate paragraphs
 
       // Check if the text exceeds the model's maximum token limit (4096 tokens for gpt-3.5-turbo)
       if (textToSummarize.split(' ').length > 4096) {
@@ -73,7 +73,7 @@ function getText() {
 async function generateSummary(text) {
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4-1106-preview',
       messages: [
         { role: 'system', content: 'You are a helpful assistant.' },
         { role: 'user', content: text },
@@ -108,3 +108,23 @@ function closeElement() {
   element.style.display = 'none';
   window.close();
 }
+
+
+//Button to copy text to clipboard 
+document.getElementById('copyButton').addEventListener('click', function () {
+  // Get the text content from the 'summary' element
+  var summaryText = document.getElementById('summary').innerText;
+
+  var tempTextarea = document.createElement('textarea');
+  tempTextarea.value = summaryText;
+
+  document.body.appendChild(tempTextarea);
+
+  // Select and copy the text to the clipboard
+  tempTextarea.select();
+  document.execCommand('copy');
+
+  document.body.removeChild(tempTextarea);
+
+  alert('Text copied to clipboard!');
+});
