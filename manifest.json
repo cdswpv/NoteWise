@@ -25,7 +25,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["node_modules/*"],
+      "resources": ["node_modules/*", "overlay.html", "overlay.js"],
       "matches": ["<all_urls>"]
     }
   ]

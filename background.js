@@ -5,7 +5,9 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-chrome.runtime.onInstalled.addListener(() => {
+let textSection;
+
+chrome.runtime.onInstalled.addListener((tab) => {
   var contextSelection = {
       "id": "text", 
       "title": "Summarize highlighted text with NoteWise",
@@ -18,15 +20,30 @@ chrome.runtime.onInstalled.addListener(() => {
     }
     chrome.contextMenus.create(contextSelection);
     chrome.contextMenus.create(contextImage);
-  
-  
+    console.log(tab);
+    
+    chrome.contextMenus.onClicked.addListener((tab) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        var currentTab = tabs[0];
+        console.log(tabs);
+        // Check if the tab's URL is not a chrome:// URL
+        if (!currentTab.url.startsWith('chrome://')) {
+          chrome.scripting.executeScript({
+            target: { tabId: currentTab.id },
+            function: createOverlay,
+          });
+        } else {
+          console.error('Cannot access a chrome:// URL.');
+        }
+      });
+    })
     chrome.contextMenus.onClicked.addListener(function(info, tab){
       //Add code to summarize the info variable, open the content.js file up, and display the summarization
 
 
-      //createOverlay();
-
       
+
+      console.log("summary info:")
       //Displays the text selected 
       console.log(info)
       if (info.menuItemId == "text")
@@ -34,7 +51,15 @@ chrome.runtime.onInstalled.addListener(() => {
         console.log("Selected Text: " + info.selectionText)
   
         //Generates the summary and places it into the console log
-        generateSummary(info.selectionText)
+        let summarizedText = generateSummary(info.selectionText)
+        console.log("summarizing")
+        /*
+        try
+        {
+          UpdateOverlayText(summarizedText);
+        }
+        catch(error){console.error("Error at updating overlay text: " + error)}
+        */
       }
       else if (info.menuItemId == "image")
       {
@@ -44,24 +69,108 @@ chrome.runtime.onInstalled.addListener(() => {
       }
     });
   });
-/*
+//#region Overlay Code
   function createOverlay() {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      if (tabs.length > 0) {
-        const tabId = tabs[0].id;
-        console.log("waiting for onupdate");
-        // Wait for the tab to be fully loaded before attempting to connect
-        chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-          if (changeInfo.status === 'complete' && tab.id === tabId) {
-            console.log("sending to content script");
-            const port = chrome.tabs.connect(tabId);
-            port.postMessage({ action: 'createOverlay' });
-          }
-        });
-      }
+    console.log("create overlay");
+    overlayDiv = document.createElement('div');
+    overlayDiv.id = 'customOverlay';
+    overlayDiv.style.cssText = 'position: fixed; top: 0; left: 0; width: 300px; height: 150px; border: 2px solid #000; background-color: #FFF; padding: 0; user-select: none; cursor: move; z-index: 999;';
+
+    // Header
+    header = document.createElement('div');
+    header.style.cssText = 'background-color: #333; color: #FFF; padding: 10px; display: flex; justify-content: space-between; align-items: center;';
+
+    // Title in the header
+    title = document.createElement('div');
+    title.innerText = 'NoteWise Summarization';
+    title.style.cssText = 'font-size: 16px; font-weight: bold;';
+
+    // Add a TTS button
+    ttsButton = document.createElement('button');
+    ttsButton.innerText = 'TTS';
+    ttsButton.style.cssText = 'padding: 5px; cursor: pointer;';
+    ttsButton.addEventListener('click', () => {
+        console.log('TTS button clicked');
     });
-  }
-  */
+
+    // Add a Copy button
+    copyButton = document.createElement('button');
+    copyButton.innerText = 'Copy';
+    copyButton.style.cssText = 'padding: 5px; cursor: pointer;';
+    copyButton.addEventListener('click', () => {
+        const textSection = document.getElementById('textSection');
+        if (textSection) {
+            const textToCopy = textSection.innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                console.log('Text copied to clipboard');
+            }).catch((err) => {
+                console.error('Unable to copy text to clipboard', err);
+            });
+        }
+    });
+
+    // Add a close button
+    closeButton = document.createElement('button');
+    closeButton.innerText = 'Close';
+    closeButton.style.cssText = 'padding: 5px; cursor: pointer;';
+    closeButton.addEventListener('click', () => {
+        console.log('Close button clicked');
+        document.body.removeChild(overlayDiv);
+    });
+
+    // Section area for text
+    console.log("set text section")
+    textSection = document.createElement('div');
+    textSection.id = 'textSection';
+    textSection.innerText = 'Waiting for response...';
+    textSection.style.cssText = 'padding: 10px;';
+
+    overlayDiv.appendChild(header);
+    header.appendChild(title);
+    header.appendChild(ttsButton);
+    header.appendChild(copyButton);
+    header.appendChild(closeButton);
+    overlayDiv.appendChild(textSection);
+
+    document.body.appendChild(overlayDiv);
+
+    // Make the overlay, header, and buttons draggable
+    makeOverlayDraggable(overlayDiv);
+    function GetTextSection()
+    {
+      return textSection;
+    }
+} 
+  function makeOverlayDraggable(overlayDiv) {
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    overlayDiv.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        offsetX = e.clientX - overlayDiv.getBoundingClientRect().left;
+        offsetY = e.clientY - overlayDiv.getBoundingClientRect().top;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            const x = e.clientX - offsetX;
+            const y = e.clientY - offsetY;
+
+            overlayDiv.style.left = `${x}px`;
+            overlayDiv.style.top = `${y}px`;
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+}
+function UpdateOverlayText(text)
+{
+  textSection.innerText = text;
+}
+
+//#endregion
 const login_API_KEY = "809053939553-6854kil5qm47qqc99a268u63hbcov074.apps.googleusercontent.com";
 let user_sign_in = false;
 
@@ -189,6 +298,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 })
 
 async function generateSummary(text) {
+  console.log("generating summmary")
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
@@ -204,7 +314,7 @@ async function generateSummary(text) {
     if (response.hasOwnProperty('choices') && response.choices.length > 0) {
       const summary = response.choices[0].message.content;
       console.log("summary: " + summary);
-      //createOverlay(summary);
+      return summary;
     } 
     else if (response.hasOwnProperty('error')) {
       console.error('Error from OpenAI API:', response.error.message);
@@ -212,4 +322,5 @@ async function generateSummary(text) {
   } catch (error) {
     console.error('Error generating summary: ', error);
   }
+  return ("An unknown error has occured. Close this window and try again.");
 }
