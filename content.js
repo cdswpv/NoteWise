@@ -47,7 +47,7 @@ function getText() {
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
 
-      const paragraphs = doc.querySelectorAll('p, td, ul, div, h1, h2, h3');
+      const paragraphs = doc.querySelectorAll('p, td, ul, h1, h2, h3');
 
       paragraphs.forEach((paragraph) => {
         paragraphArray.push(paragraph.textContent);
@@ -56,10 +56,10 @@ function getText() {
       // Send the paragraphs to the OpenAI API for summarization
       let textToSummarize = "Please provide a concise summary of the core information of the following, ignore any links provided you are acting as a summary tool in a browser extension: " + paragraphArray.join('\n'); // Concatenate paragraphs
 
-      // Check if the text exceeds the model's maximum token limit (4096 tokens for gpt-3.5-turbo)
+      // Check if the text exceeds the model's maximum token limit 
       if (textToSummarize.split(' ').length > 4096) {
         // If it's too long, truncate it while preserving meaningful content
-        const maxTokens = 4096; // Max tokens for gpt-3.5-turbo
+        const maxTokens = 4096; // Max tokens 
         const textArray = textToSummarize.split(' ');
         textToSummarize = textArray.slice(0, maxTokens).join(' ');
       }
