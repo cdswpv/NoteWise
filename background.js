@@ -7,6 +7,8 @@ const openai = new OpenAI({
 
 let textSection;
 
+
+//#region ContextMenus
 chrome.runtime.onInstalled.addListener((tab) => {
   var contextSelection = {
       "id": "text", 
@@ -69,6 +71,9 @@ chrome.runtime.onInstalled.addListener((tab) => {
       }
     });
   });
+//#endregion
+
+
 //#region Overlay Code
   function createOverlay() {
     console.log("create overlay");
@@ -171,6 +176,8 @@ function UpdateOverlayText(text)
 }
 
 //#endregion
+
+//#region Login Code
 const login_API_KEY = "809053939553-6854kil5qm47qqc99a268u63hbcov074.apps.googleusercontent.com";
 let user_sign_in = false;
 
@@ -296,7 +303,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
   }
 })
+//#endregion
 
+//#region Summarization Code
 async function generateSummary(text) {
   console.log("generating summmary")
   try {
@@ -324,3 +333,4 @@ async function generateSummary(text) {
   }
   return ("An unknown error has occured. Close this window and try again.");
 }
+//#endregion
