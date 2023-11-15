@@ -7,79 +7,49 @@ const openai = new OpenAI({
 
 let textSection;
 
-
 //#region ContextMenus
-chrome.runtime.onInstalled.addListener((tab) => {
-  var contextSelection = {
-      "id": "text", 
+chrome.runtime.onInstalled.addListener(() => {
+  const contextSelection = {
+      "id": "text",
       "title": "Summarize highlighted text with NoteWise",
       "contexts": ["selection"]
-    }
-    var contextImage = {
-      "id": "image", 
+  };
+
+  const contextImage = {
+      "id": "image",
       "title": "Summarize image with NoteWise",
       "contexts": ["image"]
-    }
-    chrome.contextMenus.create(contextSelection);
-    chrome.contextMenus.create(contextImage);
-    console.log(tab);
-    
-    chrome.contextMenus.onClicked.addListener((tab) => {
-      chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-        var currentTab = tabs[0];
-        console.log(tabs);
-        // Check if the tab's URL is not a chrome:// URL
-        if (!currentTab.url.startsWith('chrome://')) {
-          chrome.scripting.executeScript({
-            target: { tabId: currentTab.id },
-            function: createOverlay,
-          });
-        } else {
-          console.error('Cannot access a chrome:// URL.');
-        }
+  };
+
+  chrome.contextMenus.create(contextSelection);
+  chrome.contextMenus.create(contextImage);
+
+  chrome.contextMenus.onClicked.addListener((info, tab) => {
+      console.log("Context menu clicked");
+
+      if (info.menuItemId === "text") {
+          console.log("Selected Text: " + info.selectionText);
+          generateSummary(info.selectionText);
+          console.log("summarizing");
+      } else if (info.menuItemId === "image") {
+          console.log("Image URL: " + info.srcUrl);
+          chrome.tabs.create({ url: info.srcUrl });
+      }
+      chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          function: createOverlay,
       });
-    })
-    chrome.contextMenus.onClicked.addListener(function(info, tab){
-      //Add code to summarize the info variable, open the content.js file up, and display the summarization
-
-
-      
-
-      console.log("summary info:")
-      //Displays the text selected 
-      console.log(info)
-      if (info.menuItemId == "text")
-      {
-        console.log("Selected Text: " + info.selectionText)
-  
-        //Generates the summary and places it into the console log
-        let summarizedText = generateSummary(info.selectionText)
-        console.log("summarizing")
-        /*
-        try
-        {
-          UpdateOverlayText(summarizedText);
-        }
-        catch(error){console.error("Error at updating overlay text: " + error)}
-        */
-      }
-      else if (info.menuItemId == "image")
-      {
-        console.log("Image URL: " + info.srcUrl)
-  
-        chrome.tabs.create({url:info.srcUrl})
-      }
-    });
   });
-//#endregion
+});
 
+//#endregion
 
 //#region Overlay Code
   function createOverlay() {
     console.log("create overlay");
     overlayDiv = document.createElement('div');
     overlayDiv.id = 'customOverlay';
-    overlayDiv.style.cssText = 'position: fixed; top: 0; left: 0; width: 300px; height: 150px; border: 2px solid #000; background-color: #FFF; padding: 0; user-select: none; cursor: move; z-index: 999;';
+    overlayDiv.style.cssText = 'position: fixed; top: 0; left: 0; width: 600px; height: 300px; border: 2px solid #000; background-color: #FFF; padding: 0; user-select: none; cursor: move; z-index: 999; overflow:auto';
 
     // Header
     header = document.createElement('div');
@@ -94,6 +64,7 @@ chrome.runtime.onInstalled.addListener((tab) => {
     ttsButton = document.createElement('button');
     ttsButton.innerText = 'TTS';
     ttsButton.style.cssText = 'padding: 5px; cursor: pointer;';
+    ttsButton.style.marginRight = '0'
     ttsButton.addEventListener('click', () => {
         console.log('TTS button clicked');
     });
@@ -170,11 +141,6 @@ chrome.runtime.onInstalled.addListener((tab) => {
         isDragging = false;
     });
 }
-function UpdateOverlayText(text)
-{
-  textSection.innerText = text;
-}
-
 //#endregion
 
 //#region Login Code
@@ -310,9 +276,9 @@ async function generateSummary(text) {
   console.log("generating summmary")
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4-1106-preview',
       messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
+        { role: 'system', content: 'You are tasked to summarize the text given as concisely as possible.' },
         { role: 'user', content: text },
       ],
       max_tokens: 2000,
@@ -322,8 +288,8 @@ async function generateSummary(text) {
 
     if (response.hasOwnProperty('choices') && response.choices.length > 0) {
       const summary = response.choices[0].message.content;
+      UpdateOverlayText(summary)
       console.log("summary: " + summary);
-      return summary;
     } 
     else if (response.hasOwnProperty('error')) {
       console.error('Error from OpenAI API:', response.error.message);
@@ -331,6 +297,24 @@ async function generateSummary(text) {
   } catch (error) {
     console.error('Error generating summary: ', error);
   }
-  return ("An unknown error has occured. Close this window and try again.");
+}
+
+function UpdateOverlayText(newText) {
+  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+      const currentTab = tabs[0];
+      
+      chrome.scripting.executeScript({
+          target: { tabId: currentTab.id },
+          function: function(newText) {
+              let textSection = document.getElementById('textSection');
+              if (textSection) {
+                  textSection.innerText = newText;
+              } else {
+                  console.error('Text section not found');
+              }
+          },
+          args: [newText]
+      });
+  });
 }
 //#endregion
