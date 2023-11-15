@@ -4,7 +4,6 @@ const openai = new OpenAI({
   apiKey: process.env.API_KEY,
   dangerouslyAllowBrowser: true,
 });
-
 let textSection;
 
 //#region ContextMenus
@@ -34,6 +33,7 @@ chrome.runtime.onInstalled.addListener(() => {
       } else if (info.menuItemId === "image") {
           console.log("Image URL: " + info.srcUrl);
           chrome.tabs.create({ url: info.srcUrl });
+          generateImageSummary(info.srcUrl);
       }
       chrome.scripting.executeScript({
           target: { tabId: tab.id },
@@ -46,7 +46,6 @@ chrome.runtime.onInstalled.addListener(() => {
 
 //#region Overlay Code
   function createOverlay() {
-    console.log("create overlay");
     overlayDiv = document.createElement('div');
     overlayDiv.id = 'customOverlay';
     overlayDiv.style.cssText = 'position: fixed; top: 0; left: 0; width: 600px; height: 300px; border: 2px solid #000; background-color: #FFF; padding: 0; user-select: none; cursor: move; z-index: 999; overflow:auto';
@@ -90,12 +89,10 @@ chrome.runtime.onInstalled.addListener(() => {
     closeButton.innerText = 'Close';
     closeButton.style.cssText = 'padding: 5px; cursor: pointer;';
     closeButton.addEventListener('click', () => {
-        console.log('Close button clicked');
         document.body.removeChild(overlayDiv);
     });
 
     // Section area for text
-    console.log("set text section")
     textSection = document.createElement('div');
     textSection.id = 'textSection';
     textSection.innerText = 'Waiting for response...';
@@ -276,7 +273,7 @@ async function generateSummary(text) {
   console.log("generating summmary")
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-4-1106-preview',
+      model: 'gpt-4-vision-preview',
       messages: [
         { role: 'system', content: 'You are tasked to summarize the text given as concisely as possible.' },
         { role: 'user', content: text },
@@ -316,5 +313,34 @@ function UpdateOverlayText(newText) {
           args: [newText]
       });
   });
+}
+async function generateImageSummary(ctx)
+{
+  try {
+    response = await openai.chat.completions.create(
+      model="gpt-4-vision-preview",
+      messages=[
+        {
+          "role": "user",
+          "content": [
+            {"type": "text", "text": "Can you summarize the image? If it has text make sure to summarize the text, if it is a graph make sure to summarize the graph."},
+            {
+              "type": "image_url",
+              "image_url": {
+                "url": ctx,
+              },
+            },
+          ],
+        }
+      ],
+      max_tokens=300,
+    )
+    const summary = response.choices[0].message.content;
+    console.log(summary)
+
+  }
+  catch (error) {
+    console.error('Error generating summary: ', error);
+  }
 }
 //#endregion
