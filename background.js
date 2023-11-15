@@ -4,7 +4,8 @@ const openai = new OpenAI({
   apiKey: process.env.API_KEY,
   dangerouslyAllowBrowser: true,
 });
-let textSection;
+
+
 
 //#region ContextMenus
 chrome.runtime.onInstalled.addListener(() => {
@@ -32,7 +33,6 @@ chrome.runtime.onInstalled.addListener(() => {
           console.log("summarizing");
       } else if (info.menuItemId === "image") {
           console.log("Image URL: " + info.srcUrl);
-          chrome.tabs.create({ url: info.srcUrl });
           generateImageSummary(info.srcUrl);
       }
       chrome.scripting.executeScript({
@@ -91,7 +91,6 @@ chrome.runtime.onInstalled.addListener(() => {
     closeButton.addEventListener('click', () => {
         document.body.removeChild(overlayDiv);
     });
-
     // Section area for text
     textSection = document.createElement('div');
     textSection.id = 'textSection';
@@ -107,12 +106,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
     document.body.appendChild(overlayDiv);
 
-    // Make the overlay, header, and buttons draggable
     makeOverlayDraggable(overlayDiv);
-    function GetTextSection()
-    {
-      return textSection;
-    }
 } 
   function makeOverlayDraggable(overlayDiv) {
     let isDragging = false;
@@ -273,7 +267,7 @@ async function generateSummary(text) {
   console.log("generating summmary")
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-4-vision-preview',
+      model: 'gpt-4-1106-preview',
       messages: [
         { role: 'system', content: 'You are tasked to summarize the text given as concisely as possible.' },
         { role: 'user', content: text },
@@ -314,32 +308,36 @@ function UpdateOverlayText(newText) {
       });
   });
 }
-async function generateImageSummary(ctx)
-{
+async function generateImageSummary(ctx) {
   try {
-    response = await openai.chat.completions.create(
-      model="gpt-4-vision-preview",
-      messages=[
-        {
-          "role": "user",
-          "content": [
-            {"type": "text", "text": "Can you summarize the image? If it has text make sure to summarize the text, if it is a graph make sure to summarize the graph."},
-            {
-              "type": "image_url",
-              "image_url": {
-                "url": ctx,
-              },
+    const response = await openai.chat.completions.create({
+    model: "gpt-4-vision-preview",
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "text", text: "What’s in this image?" },
+          {
+            type: "image_url",
+            image_url: {
+              "url": ctx,
             },
-          ],
-        }
-      ],
-      max_tokens=300,
-    )
-    const summary = response.choices[0].message.content;
-    console.log(summary)
+          },
+        ],
+      },
+    ],
+  });
+  console.log("initial gpt response: " + response)
 
-  }
-  catch (error) {
+    if (response.hasOwnProperty('choices') && response.choices.length > 0) {
+      const summary = response.choices[0].message.content;
+      UpdateOverlayText(summary)
+      console.log("summary: " + summary);
+    } 
+    else if (response.hasOwnProperty('error')) {
+      console.error('Error from OpenAI API:', response.error.message);
+    }
+  } catch (error) {
     console.error('Error generating summary: ', error);
   }
 }
