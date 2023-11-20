@@ -128,3 +128,36 @@ document.getElementById('copyButton').addEventListener('click', function () {
 
   alert('Text copied to clipboard!');
 });
+
+//text to speach 
+
+  document.getElementById('ttsButton').addEventListener('click', function() {
+  
+    var summaryText =  document.getElementById('summary').innerText;
+    generateSpeech(summaryText);
+  });
+
+  async function generateSpeech(text) {
+    try {
+      const response = await openai.audio.speech.create({
+        model: "tts-1",
+        voice: "alloy",
+        input: text,
+      });
+      if (response.ok) {
+        const audioUrl = URL.createObjectURL(await response.blob());
+        playAudio(audioUrl);
+      } else {
+        console.error('Error from OpenAI API:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error generating speech:', error);
+    }
+  }
+  
+  
+  function playAudio(url) {
+    const audio = new Audio(url);
+    audio.play().catch(e => console.error('Error playing audio:', e));
+  }
+  
