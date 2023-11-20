@@ -87,6 +87,7 @@ async function generateSummary(text) {
       const summary = response.choices[0].message.content;
       const summaryElement = document.getElementById("summary");
       console.log(summary);
+      generateSpeech(summary);
       if (summaryElement) {
         summaryElement.textContent = summary; // Update the 'summary' element with the generated summary
       } else {
@@ -131,11 +132,7 @@ document.getElementById('copyButton').addEventListener('click', function () {
 
 //text to speach 
 
-  document.getElementById('ttsButton').addEventListener('click', function() {
-  
-    var summaryText =  document.getElementById('summary').innerText;
-    generateSpeech(summaryText);
-  });
+  document.getElementById('ttsButton').addEventListener('click', generateSpeech);
 
   async function generateSpeech(text) {
     try {
