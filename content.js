@@ -101,7 +101,13 @@ async function generateSummary(text) {
   }
 }
 
-document.getElementById('myButton').addEventListener('click', getText);
+document.getElementById('myButton').addEventListener('click', function() {
+  console.log('Button clicked');
+  getText();
+  hideButton();
+  showLoader();
+  });
+
 document.getElementById('x').addEventListener('click', closeElement);
 
 function closeElement() {
@@ -161,3 +167,50 @@ document.getElementById('ttsButton').addEventListener('click', function() {
     audio.play().catch(e => console.error('Error playing audio:', e));
   }
   
+
+
+function hideButton() {
+  console.log('Hiding button');
+  var button = document.getElementById('myButton');
+  button.classList.add('hidden');
+}
+
+function showLoader() {
+  var loader = document.getElementById('loader');
+  loader.style.display = 'block';
+
+  setTimeout(function () {
+    loader.style.display = 'none';
+  }, 3000); // We need to replace with the actual duration
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  var textSizeInput = document.getElementById('text-size');
+  var testElement = document.getElementById('test');
+
+  textSizeInput.addEventListener('input', function () {
+    testElement.style.fontSize = this.value + "px";
+  })
+})
+
+function updateFont() {
+  var selector = document.getElementById('font-style');
+  var family = selector.options[selector.selectedIndex].value;
+  var text = document.getElementById('test')
+  text.style.fontFamily = family;
+
+  selector.addEventListener('input')
+}
+
+function openNav() {
+  document.getElementById("navbar").style.width = "250px";
+}
+
+// Function to close the sliding navbar
+function closeNav() {
+  document.getElementById("navbar").style.width = "0";
+}
+
+// Event listener for the openNav button
+document.getElementById("openNav").addEventListener("click", openNav);
+document.getElementById("closeNav").addEventListener("click", closeNav);

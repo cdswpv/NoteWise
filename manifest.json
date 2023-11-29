@@ -3,7 +3,7 @@
   "name": "NoteWise",
   "description": "NoteWise offers a quick, easy to use tool to give users a quick summarization on any webpage",
   "version": "1.0.2",
-  "permissions": ["storage", "tabs", "activeTab", "scripting", "contextMenus", "identity", "identity.email"],
+  "permissions": ["tabs", "activeTab", "scripting", "contextMenus", "identity", "identity.email"],
   "action": {
     "default_popup": "popup.html"
   },
