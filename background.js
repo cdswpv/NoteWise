@@ -5,9 +5,8 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-
-
 //#region ContextMenus
+
 chrome.runtime.onInstalled.addListener(() => {
   const contextSelection = {
       "id": "text",
@@ -66,6 +65,17 @@ chrome.runtime.onInstalled.addListener(() => {
     ttsButton.style.marginRight = '0'
     ttsButton.addEventListener('click', () => {
         console.log('TTS button clicked');
+        const textSection = document.getElementById('textSection');
+        if (textSection)
+        {
+          console.log("text section exists")
+          if (textSection.innerText != "Waiting for response...")
+          {
+            const text = textSection.innerText;
+            console.log("sending to generate audio")
+            generateSpeech(text)
+          }
+        }
     });
 
     // Add a Copy button
@@ -132,9 +142,28 @@ chrome.runtime.onInstalled.addListener(() => {
         isDragging = false;
     });
 }
+function UpdateOverlayText(newText) {
+  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+      const currentTab = tabs[0];
+      
+      chrome.scripting.executeScript({
+          target: { tabId: currentTab.id },
+          function: function(newText) {
+              let textSection = document.getElementById('textSection');
+              if (textSection) {
+                  textSection.innerText = newText;
+              } else {
+                  console.error('Text section not found');
+              }
+          },
+          args: [newText]
+      });
+  });
+}
 //#endregion
 
 //#region Login Code
+
 const login_API_KEY = "809053939553-6854kil5qm47qqc99a268u63hbcov074.apps.googleusercontent.com";
 let user_sign_in = false;
 
@@ -260,9 +289,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
   }
 })
+
 //#endregion
 
-//#region Summarization Code
+//#region OpenAI API Calls
 async function generateSummary(text) {
   console.log("generating summmary")
   try {
@@ -290,24 +320,7 @@ async function generateSummary(text) {
   }
 }
 
-function UpdateOverlayText(newText) {
-  chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-      const currentTab = tabs[0];
-      
-      chrome.scripting.executeScript({
-          target: { tabId: currentTab.id },
-          function: function(newText) {
-              let textSection = document.getElementById('textSection');
-              if (textSection) {
-                  textSection.innerText = newText;
-              } else {
-                  console.error('Text section not found');
-              }
-          },
-          args: [newText]
-      });
-  });
-}
+
 async function generateImageSummary(ctx) {
   try {
     const response = await openai.chat.completions.create({
@@ -321,11 +334,13 @@ async function generateImageSummary(ctx) {
             type: "image_url",
             image_url: {
               "url": ctx,
+              "detail": "low"
             },
           },
         ],
       },
     ],
+    max_tokens: 2000,
   });
   console.log("initial gpt response: " + response)
 
@@ -340,5 +355,32 @@ async function generateImageSummary(ctx) {
   } catch (error) {
     console.error('Error generating summary: ', error);
   }
+}
+async function generateSpeech(text) {
+  console.log("in gen speech function")
+  try {
+    const response = await openai.audio.speech.create({
+      model: "tts-1",
+      voice: "alloy",
+      input: text,
+    });
+    if (response.ok) {
+      console.log("generated ok tts response");
+      const audioUrl = URL.createObjectURL(await response.blob());
+      playAudio(audioUrl);
+    } else {
+      console.error('Error from OpenAI API:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error generating speech:', error);
+  }
+}
+
+
+function playAudio(url) {
+  console.log("attempting to play audio");
+  const audio = new Audio(url);
+  audio.play().catch(e => console.error('Error playing audio:', e));
+  console.log("Audio played");
 }
 //#endregion

@@ -4,32 +4,7 @@ const openai = new OpenAI({
   apiKey: process.env.API_KEY,
   dangerouslyAllowBrowser: true,
 });
-/*
-function CreateOverlayBox() {
-  console.log("made it to overlay box")
-  const overlay = document.createElement('div');
-  overlay.id = 'custom-overlay';
-  overlay.style.position = 'fixed';
-  overlay.style.top = '0';
-  overlay.style.left = '0';
-  overlay.style.width = '100%';
-  overlay.style.height = '100%';
-  overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-  overlay.style.zIndex = '9999';
-  overlay.style.display = 'flex';
-  overlay.style.justifyContent = 'center';
-  overlay.style.alignItems = 'center';
 
-  document.body.appendChild(overlay);
-}
-chrome.runtime.onConnect.addListener(function(port) {
-  port.onMessage.addListener(function(message) {
-    if (message.action === 'createOverlay') {
-      createOverlayBox();
-    }
-  });
-});
-*/
 const paragraphArray = [];
 
 function getText() {
@@ -101,46 +76,49 @@ async function generateSummary(text) {
   }
 }
 
-document.getElementById('myButton').addEventListener('click', function() {
-  console.log('Button clicked');
-  getText();
-  hideButton();
-  showLoader();
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  document.getElementById('myButton').addEventListener('click', function() {
+    console.log('Button clicked');
+    getText();
+    hideButton();
+    showLoader();
+    });
+  
+  document.getElementById('x').addEventListener('click', closeElement);
+
+  function closeElement() {
+    const element = document.getElementById('x');
+    element.style.display = 'none';
+    window.close();
+  }
+
+
+  //Button to copy text to clipboard 
+  document.getElementById('copyButton').addEventListener('click', function () {
+    // Get the text content from the 'summary' element
+    var summaryText = document.getElementById('summary').innerText;
+
+    var tempTextarea = document.createElement('textarea');
+    tempTextarea.value = summaryText;
+
+    document.body.appendChild(tempTextarea);
+
+    // Select and copy the text to the clipboard
+    tempTextarea.select();
+    document.execCommand('copy');
+
+    document.body.removeChild(tempTextarea);
+
+    alert('Text copied to clipboard!');
   });
 
-document.getElementById('x').addEventListener('click', closeElement);
-
-function closeElement() {
-  const element = document.getElementById('x');
-  element.style.display = 'none';
-  window.close();
-}
-
-
-//Button to copy text to clipboard 
-document.getElementById('copyButton').addEventListener('click', function () {
-  // Get the text content from the 'summary' element
-  var summaryText = document.getElementById('summary').innerText;
-
-  var tempTextarea = document.createElement('textarea');
-  tempTextarea.value = summaryText;
-
-  document.body.appendChild(tempTextarea);
-
-  // Select and copy the text to the clipboard
-  tempTextarea.select();
-  document.execCommand('copy');
-
-  document.body.removeChild(tempTextarea);
-
-  alert('Text copied to clipboard!');
-});
-
-//text to speach 
-document.getElementById('ttsButton').addEventListener('click', function() {
-  
-  var summaryText =  document.getElementById('summary').innerText;
-  generateSpeech(summaryText);
+  //text to speech 
+  document.getElementById('ttsButton').addEventListener('click', function() {
+    
+    var summaryText =  document.getElementById('summary').innerText;
+    generateSpeech(summaryText);
 });
 
   async function generateSpeech(text) {
@@ -160,7 +138,7 @@ document.getElementById('ttsButton').addEventListener('click', function() {
       console.error('Error generating speech:', error);
     }
   }
-  
+})
   
   function playAudio(url) {
     const audio = new Audio(url);
