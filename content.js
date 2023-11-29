@@ -93,7 +93,10 @@ document.addEventListener('DOMContentLoaded', function() {
     element.style.display = 'none';
     window.close();
   }
-
+  
+  // Event listener for the openNav button
+  document.getElementById("openNav").addEventListener("click", openNav);
+  document.getElementById("closeNav").addEventListener("click", closeNav);
 
   //Button to copy text to clipboard 
   document.getElementById('copyButton').addEventListener('click', function () {
@@ -119,7 +122,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     var summaryText =  document.getElementById('summary').innerText;
     generateSpeech(summaryText);
-});
+  });
+  
+  var textSizeInput = document.getElementById('text-size');
+  var testElement = document.getElementById('test');
+
+  textSizeInput.addEventListener('input', function () {
+    testElement.style.fontSize = this.value + "px";
+  })
 
   async function generateSpeech(text) {
     try {
@@ -163,12 +173,7 @@ function showLoader() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  var textSizeInput = document.getElementById('text-size');
-  var testElement = document.getElementById('test');
-
-  textSizeInput.addEventListener('input', function () {
-    testElement.style.fontSize = this.value + "px";
-  })
+  
 })
 
 function updateFont() {
@@ -188,7 +193,3 @@ function openNav() {
 function closeNav() {
   document.getElementById("navbar").style.width = "0";
 }
-
-// Event listener for the openNav button
-document.getElementById("openNav").addEventListener("click", openNav);
-document.getElementById("closeNav").addEventListener("click", closeNav);
