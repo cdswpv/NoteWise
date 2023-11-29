@@ -76,40 +76,42 @@ async function generateSummary(text) {
   }
 }
 
-document.getElementById('myButton').addEventListener('click', getText);
-document.getElementById('x').addEventListener('click', closeElement);
+document.addEventListener('DOMContentLoaded', function() {
 
-function closeElement() {
-  const element = document.getElementById('x');
-  element.style.display = 'none';
-  window.close();
-}
+  document.getElementById('myButton').addEventListener('click', getText);
+  document.getElementById('x').addEventListener('click', closeElement);
+
+  function closeElement() {
+    const element = document.getElementById('x');
+    element.style.display = 'none';
+    window.close();
+  }
 
 
-//Button to copy text to clipboard 
-document.getElementById('copyButton').addEventListener('click', function () {
-  // Get the text content from the 'summary' element
-  var summaryText = document.getElementById('summary').innerText;
+  //Button to copy text to clipboard 
+  document.getElementById('copyButton').addEventListener('click', function () {
+    // Get the text content from the 'summary' element
+    var summaryText = document.getElementById('summary').innerText;
 
-  var tempTextarea = document.createElement('textarea');
-  tempTextarea.value = summaryText;
+    var tempTextarea = document.createElement('textarea');
+    tempTextarea.value = summaryText;
 
-  document.body.appendChild(tempTextarea);
+    document.body.appendChild(tempTextarea);
 
-  // Select and copy the text to the clipboard
-  tempTextarea.select();
-  document.execCommand('copy');
+    // Select and copy the text to the clipboard
+    tempTextarea.select();
+    document.execCommand('copy');
 
-  document.body.removeChild(tempTextarea);
+    document.body.removeChild(tempTextarea);
 
-  alert('Text copied to clipboard!');
-});
+    alert('Text copied to clipboard!');
+  });
 
-//text to speach 
-document.getElementById('ttsButton').addEventListener('click', function() {
-  
-  var summaryText =  document.getElementById('summary').innerText;
-  generateSpeech(summaryText);
+  //text to speech 
+  document.getElementById('ttsButton').addEventListener('click', function() {
+    
+    var summaryText =  document.getElementById('summary').innerText;
+    generateSpeech(summaryText);
 });
 
   async function generateSpeech(text) {
@@ -129,7 +131,7 @@ document.getElementById('ttsButton').addEventListener('click', function() {
       console.error('Error generating speech:', error);
     }
   }
-  
+})
   
   function playAudio(url) {
     const audio = new Audio(url);

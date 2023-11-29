@@ -5,9 +5,8 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-
-
 //#region ContextMenus
+
 chrome.runtime.onInstalled.addListener(() => {
   const contextSelection = {
       "id": "text",
@@ -164,6 +163,7 @@ function UpdateOverlayText(newText) {
 //#endregion
 
 //#region Login Code
+
 const login_API_KEY = "809053939553-6854kil5qm47qqc99a268u63hbcov074.apps.googleusercontent.com";
 let user_sign_in = false;
 
@@ -289,6 +289,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
   }
 })
+
 //#endregion
 
 //#region OpenAI API Calls
@@ -364,6 +365,7 @@ async function generateSpeech(text) {
       input: text,
     });
     if (response.ok) {
+      console.log("generated ok tts response");
       const audioUrl = URL.createObjectURL(await response.blob());
       playAudio(audioUrl);
     } else {
@@ -376,7 +378,9 @@ async function generateSpeech(text) {
 
 
 function playAudio(url) {
+  console.log("attempting to play audio");
   const audio = new Audio(url);
   audio.play().catch(e => console.error('Error playing audio:', e));
+  console.log("Audio played");
 }
 //#endregion
