@@ -1,4 +1,23 @@
+#sidebar {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+  background-color: #343a40; /* Bootstrap dark background color */
+  padding-top: 20px;
+}
 
+#sidebar a {
+  padding: 15px;
+  text-decoration: none;
+  font-size: 18px;
+  color: white;
+  display: block;
+}
+
+#content {
+  margin-left: 250px;
+  padding: 20px;
+}
 body {
     width: 300px;
     height: 300px;
@@ -20,18 +39,19 @@ body {
   font-weight: bold;
 
   padding: 1em 2em;
-  margin: 15% 22% 0% 18%;
+
 
   transition: all .5s;
+
+  top: 0%;
+  margin: 23%;
 
   border: .25em solid var(--back-grround-color);
   border-radius: 1em;
 
   outline: none;
-  position: static;
+  position: absolute;
   align-items: center;
-  top: 50%;
-  left: 25%;
 }
 
 #myButton:hover{
@@ -52,23 +72,75 @@ body {
 
 }
 
+#navbar {
+  width: 10%; /* Initial width as a percentage */
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #343a40; /* Bootstrap dark background color */
+  overflow-x: hidden;
+  transition: width 0.5s;
+}
+
+#navbar:hover, #navbar.show {
+  width: 20%; /* Expanded width as a percentage */
+}
+
+#navbar ul {
+  padding: 0;
+  list-style: none;
+}
+
+#navbar a {
+  text-decoration: none;
+  font-size: 14px; /* Adjusted font size */
+  color: white;
+  display: flex;
+  align-items: center; /* Center items vertically in the container */
+  padding: 10px; /* Adjusted padding */
+  transition: 0.3s;
+  white-space: nowrap; /* Prevent text from wrapping */
+}
+
+#navbar a i {
+  font-size: 18px; /* Adjusted icon size */
+  margin-right: 8px; /* Adjusted margin */
+  margin-left: -5px;
+  padding-left: 0px;
+}
+
+#navbar a .label {
+  display: none; /* Initially hide labels */
+  margin-left: 8px; /* Adjusted margin */
+}
+
+#navbar:hover a .label {
+  display: inline; /* Show labels on hover */
+}
+
+#navbar a:hover {
+  color: #f1f1f1;
+}
+
 #openNav {
   position: absolute;
   background: none;
   color: white;
   top: 45%;
   left: 10px;
-
 }
 
 #summary {
   max-height: 200px;  
   width: 225px;
-  margin: 5% 0% 0% 10%;
-  position: static;
+  top: 45%;
+  margin: 5% 17.5%;
+  position: absolute;
   overflow-y: auto;   
   white-space: pre-wrap; 
-  border: 1px solid #ccc; 
+  border: 1px solid black; 
   padding: 10px;       
 }
 
@@ -150,35 +222,4 @@ body {
   50% {
     opacity: 0.5;
   }
-}
-
-#navbar {
-  width: 0;
-  height: 100%;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: rgb(57, 55, 57);
-  border-style: solid;
-  border-color: black;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
-
-}
-
-#navbar a {
-  position: absolute;
-  background: none;
-  color: white;
-  top: 10px;
-  left: 10px;
-  text-decoration: none;
-  display: block;
-  transition: 0.3s;
-}
-
-#navbar a:hover {
-  color: #f1f1f1;
 }

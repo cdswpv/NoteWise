@@ -78,7 +78,7 @@ async function generateSummary(text) {
 
 
 document.addEventListener('DOMContentLoaded', function() {
-
+  
   document.getElementById('myButton').addEventListener('click', function() {
     console.log('Button clicked');
     getText();
@@ -186,27 +186,39 @@ function updateFont() {
 }
 
 function openNav() {
-  document.getElementById("navbar").style.width = "75px";
+  var navbar = document.getElementById("navbar");
+  var maxLabelWidth = getMaxLabelWidth();
+
+  navbar.style.width = (50 + maxLabelWidth) + "px"; // 50px is the initial width
 }
 
 // Function to close the sliding navbar
 function closeNav() {
-  document.getElementById("navbar").style.width = "0";
+  document.getElementById("navbar").style.width = "10%";
 }
 
 function moveMenu() {
   console.log('Faded');
   var menu = document.getElementById('myButton');
-  menu.style.margin = "15% 22% 0% 30%";
+  menu.style.margin = "margin: 23% 34%";
 }
 
-function moveMenu2() {
+function moveMenuBack() {
   console.log('Faded');
   var menu = document.getElementById('myButton');
-  menu.style.margin = "15% 22% 0% 18%";
+  menu.style.margin = "23%";
 }
 
+function getMaxLabelWidth() {
+  var labels = document.querySelectorAll("#navbar a .label");
+  var maxLabelWidth = 0;
 
+  labels.forEach(function(label) {
+    maxLabelWidth = Math.max(maxLabelWidth, label.offsetWidth);
+  });
+
+  return maxLabelWidth;
+}
 
 // Event listener for the openNav button
 document.getElementById("openNav").addEventListener('click', function() {
@@ -215,11 +227,13 @@ document.getElementById("openNav").addEventListener('click', function() {
 });
 
 document.getElementById("navbar").addEventListener('mouseover', function() {
+  console.log("moouseover");
   openNav();
   moveMenu();
 });
-
+/*
 document.getElementById("navbar").addEventListener('mouseout', function() {
+  console.log("moouseout");
   closeNav();
-  moveMenu2();
-});
+  moveMenuBack();
+});*/

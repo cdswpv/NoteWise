@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
   <link rel="stylesheet" href="popup.css" />
-</head>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></head>
 <body>
   <div class="lds-grid" id="loader">
     <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
@@ -10,18 +13,31 @@
 
   <div id="main">
     <button id="myButton">Summarize</button>
-    <button id="x">Close</button>
     <label id="openNav">|||</label>
     <div id="menu">
       <p id = "summary"> </p>
     </div>
     <div id="navbar">
-        <button id="copyButton">Copy to Clipboard</button>
-        <button id="ttsButton">Read Summary</button>
-        <input id="text-size" value="12" type="range" min="15" max="45"> Font Size </input>
-        <button id = "Login">Login w/ GOOGLE</button>
+      <ul>
+        <li>
+          <a href="#" id="Login"><i class="fas fa-sign-in-alt"></i> <span class="label">Login</span></a>
+        </li>
+        <li>
+          <a href="#" id="copyButton"><i class="far fa-copy"></i> <span class="label">Copy to Clipboard</span></a>
+        </li>
+        <li>
+          <a href="#" id="customRange1"><i class="fas fa-font"></i> <span class="label">Set Font Range</span></a>
+        </li>
+        <li>
+          <a href="#" id="ttsButton"><i class="fas fa-volume-up"></i> <span class="label">Text to Speech</span></a>
+        </li>
+      </ul>
     </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
   <script type="module" src="dist/content.bundle.js"></script>
   <script type="module" src="dist/background.bundle.js"></script>
      <a class = "start-button"  href="mainApp.html">
