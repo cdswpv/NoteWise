@@ -299,7 +299,7 @@ async function generateSummary(text) {
     const response = await openai.chat.completions.create({
       model: 'gpt-4-1106-preview',
       messages: [
-        { role: 'system', content: 'You are tasked to summarize the text given as concisely as possible.' },
+        { role: 'system', content: 'You are tasked to summarize the text given as concisely as possible without omitting important details.' },
         { role: 'user', content: text },
       ],
       max_tokens: 2000,
@@ -329,7 +329,7 @@ async function generateImageSummary(ctx) {
       {
         role: "user",
         content: [
-          { type: "text", text: "What’s in this image?" },
+          { type: "text", text: "What’s in this image? If the image is a graph please explain every aspect of the graph and summarize the findings." },
           {
             type: "image_url",
             image_url: {

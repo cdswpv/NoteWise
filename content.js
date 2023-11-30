@@ -50,7 +50,7 @@ async function generateSummary(text) {
     const response = await openai.chat.completions.create({
       model: 'gpt-4-1106-preview',
       messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
+        { role: 'system', content: 'A user will provide you with text from a webpage. Summarize the given text briefly without omitting any important details.' },
         { role: 'user', content: text },
       ],
       max_tokens: 2000,
@@ -93,7 +93,10 @@ document.addEventListener('DOMContentLoaded', function() {
     element.style.display = 'none';
     window.close();
   }
-
+  
+  // Event listener for the openNav button
+  document.getElementById("openNav").addEventListener("click", openNav);
+  //document.getElementById("closeNav").addEventListener("click", closeNav);
 
   //Button to copy text to clipboard 
   document.getElementById('copyButton').addEventListener('click', function () {
@@ -119,7 +122,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     var summaryText =  document.getElementById('summary').innerText;
     generateSpeech(summaryText);
-});
+  });
+  
+  var textSizeInput = document.getElementById('text-size');
+  var testElement = document.getElementById('test');
+
+  textSizeInput.addEventListener('input', function () {
+    testElement.style.fontSize = this.value + "px";
+  })
 
   async function generateSpeech(text) {
     try {
@@ -163,12 +173,7 @@ function showLoader() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  var textSizeInput = document.getElementById('text-size');
-  var testElement = document.getElementById('test');
-
-  textSizeInput.addEventListener('input', function () {
-    testElement.style.fontSize = this.value + "px";
-  })
+  
 })
 
 function updateFont() {
