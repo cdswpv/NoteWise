@@ -7,20 +7,19 @@
   <div class="lds-grid" id="loader">
     <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
   </div>
-  <button id="myButton">Summarize</button>
-  <button id="x">Close</button>
-  <button id="openNav">|||</button>
 
-  <div >
-    <p id = "summary"> </p>
-    <button id="copyButton">Copy to Clipboard</button>
-    <button id="ttsButton">Read Summary</button>
-
-    <!-- Sliding Navbar -->
+  <div id="main">
+    <button id="myButton">Summarize</button>
+    <button id="x">Close</button>
+    <label id="openNav">|||</label>
+    <div id="menu">
+      <p id = "summary"> </p>
+    </div>
     <div id="navbar">
-      <a href="">Close</a>
-      <input id="text-size" value="12" type="range" min="15" max="45"> Font Size </input>
-      <button id = "Login">Login w/ GOOGLE</button>
+        <button id="copyButton">Copy to Clipboard</button>
+        <button id="ttsButton">Read Summary</button>
+        <input id="text-size" value="12" type="range" min="15" max="45"> Font Size </input>
+        <button id = "Login">Login w/ GOOGLE</button>
     </div>
   </div>
   <script type="module" src="dist/content.bundle.js"></script>

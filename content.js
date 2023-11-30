@@ -181,7 +181,7 @@ function updateFont() {
 }
 
 function openNav() {
-  document.getElementById("navbar").style.width = "250px";
+  document.getElementById("navbar").style.width = "75px";
 }
 
 // Function to close the sliding navbar
@@ -189,6 +189,32 @@ function closeNav() {
   document.getElementById("navbar").style.width = "0";
 }
 
+function moveMenu() {
+  console.log('Faded');
+  var menu = document.getElementById('myButton');
+  menu.style.margin = "15% 22% 0% 30%";
+}
+
+function moveMenu2() {
+  console.log('Faded');
+  var menu = document.getElementById('myButton');
+  menu.style.margin = "15% 22% 0% 18%";
+}
+
+
+
 // Event listener for the openNav button
-document.getElementById("openNav").addEventListener("click", openNav);
-document.getElementById("closeNav").addEventListener("click", closeNav);
+document.getElementById("openNav").addEventListener('click', function() {
+  openNav();
+  moveMenu();
+});
+
+document.getElementById("navbar").addEventListener('mouseover', function() {
+  openNav();
+  moveMenu();
+});
+
+document.getElementById("navbar").addEventListener('mouseout', function() {
+  closeNav();
+  moveMenu2();
+});

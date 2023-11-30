@@ -1,1 +1,0 @@
-<input id="text-size" value="12" type="range" min="15" max="45">
