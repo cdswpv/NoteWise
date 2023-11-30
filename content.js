@@ -231,9 +231,9 @@ document.getElementById("navbar").addEventListener('mouseover', function() {
   openNav();
   moveMenu();
 });
-/*
+
 document.getElementById("navbar").addEventListener('mouseout', function() {
   console.log("moouseout");
   closeNav();
   moveMenuBack();
-});*/
+});
