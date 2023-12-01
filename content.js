@@ -6,6 +6,7 @@ const openai = new OpenAI({
 });
 
 const paragraphArray = [];
+let isLoading = false;
 
 function getText() {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -47,6 +48,8 @@ function getText() {
 
 async function generateSummary(text) {
   try {
+    showLoader();
+
     const response = await openai.chat.completions.create({
       model: 'gpt-4-1106-preview',
       messages: [
@@ -73,9 +76,16 @@ async function generateSummary(text) {
     }
   } catch (error) {
     console.error('Error generating summary: ', error);
+  } finally{
+    isLoading = false;
+    hideLoader();
   }
 }
 
+function hideLoader() {
+  var loader = document.getElementById('loader');
+  loader.style.display = 'none';
+}
 
 document.addEventListener('DOMContentLoaded', function() {
   
@@ -83,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Button clicked');
     getText();
     hideButton();
-    showLoader();
     });
   
   document.getElementById('x').addEventListener('click', closeElement);
@@ -166,10 +175,7 @@ function hideButton() {
 function showLoader() {
   var loader = document.getElementById('loader');
   loader.style.display = 'block';
-
-  setTimeout(function () {
-    loader.style.display = 'none';
-  }, 3000); // We need to replace with the actual duration
+  isLoading = true;
 }
 
 document.addEventListener('DOMContentLoaded', function () {
