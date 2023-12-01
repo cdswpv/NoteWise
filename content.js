@@ -30,7 +30,7 @@ function getText() {
       });
 
       // Send the paragraphs to the OpenAI API for summarization
-      let textToSummarize = "Please provide a concise summary of the core information of the following, ignore any links provided you are acting as a summary tool in a browser extension: " + paragraphArray.join('\n'); // Concatenate paragraphs
+      let textToSummarize = "Please provide a concise summary of the core information of the following, ignore any links provided you are acting as a summary tool in a browser extension limit it respose to a short paragraph and some bullet points: " + paragraphArray.join('\n'); // Concatenate paragraphs
 
       // Check if the text exceeds the model's maximum token limit 
       if (textToSummarize.split(' ').length > 4096) {
@@ -39,7 +39,7 @@ function getText() {
         const textArray = textToSummarize.split(' ');
         textToSummarize = textArray.slice(0, maxTokens).join(' ');
       }
-      console.log(textToSummarize);
+       console.log(textToSummarize);
       // Use the OpenAI Chat Completions API to generate a summary
       generateSummary(textToSummarize);
     }
@@ -56,27 +56,20 @@ async function generateSummary(text) {
         { role: 'system', content: 'A user will provide you with text from a webpage. Summarize the given text briefly without omitting any important details.' },
         { role: 'user', content: text },
       ],
-      max_tokens: 2000,
+      max_tokens: 1000,
     });
-
-    console.log(response)
 
     if (response.hasOwnProperty('choices') && response.choices.length > 0) {
       const summary = response.choices[0].message.content;
       const summaryElement = document.getElementById("summary");
-      console.log(summary);
      
       if (summaryElement) {
         summaryElement.textContent = summary; // Update the 'summary' element with the generated summary
-      } else {
-        console.error('Element with ID "summary" not found.');
-      }
+      } 
     } else if (response.hasOwnProperty('error')) {
       console.error('Error from OpenAI API:', response.error.message);
     }
-  } catch (error) {
-    console.error('Error generating summary: ', error);
-  } finally{
+  }  finally{
     isLoading = false;
     hideLoader();
   }
