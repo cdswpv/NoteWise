@@ -105,7 +105,7 @@ chrome.runtime.onInstalled.addListener(() => {
     textSection = document.createElement('div');
     textSection.id = 'textSection';
     textSection.innerText = 'Waiting for response...';
-    textSection.style.cssText = 'padding: 10px;';
+    textSection.style.cssText = 'padding: 10px; color: white;';
 
     overlayDiv.appendChild(header);
     header.appendChild(title);

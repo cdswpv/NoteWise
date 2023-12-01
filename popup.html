@@ -13,32 +13,27 @@
 
   <div id="main">
     <button id="myButton">Summarize</button>
-    <label id="openNav">|||</label>
     <div id="menu">
       <p id = "summary"> </p>
     </div>
     <div id="navbar">
       <ul>
-        <li>
-          <a href="#" id="Login"><i class="fas fa-sign-in-alt"></i> <span class="label">Login</span></a>
-        </li>
-        <li>
-          <a href="#" id="copyButton"><i class="far fa-copy"></i> <span class="label">Copy to Clipboard</span></a>
-        </li>
-        <li>
-          <!-- Swapped the label and input to have the range before the text -->
-          <input type="range" class="form-control-range" id="customRange1">
-          <label for="customRange1">Set Font Range:</label>
-        </li>
-        <li>
-          <a href="#" id="ttsButton"><i class="fas fa-volume-up"></i> <span class="label">Text to Speech</span></a>
-        </li>
+
+        <li><span class="label">Login</span></li>
+        <li><a href="#" id="Login"></a><i class="fas fa-sign-in-alt icon"></i></a></li>
+
+        <li><span class="label">Copy</span></li>
+        <li><a href="#" id="copyButton"><i class="far fa-copy icon"></i></a></li>
+
+        <li><label for="text-size" class="label">Font Size</label></li>
+        <li><input type="range" class="form-control-range" id="fontrange"></li>
+
+        <li><span class="label">TTS</span></li>
+        <li><a href="#" id="ttsButton"><i class="fas fa-volume-up icon"></i></a></li>
+        
       </ul>
     </div>
   </div>
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <script type="module" src="dist/content.bundle.js"></script>
   <script type="module" src="dist/background.bundle.js"></script>

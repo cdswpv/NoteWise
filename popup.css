@@ -52,88 +52,55 @@ body {
 
 }
 
-#x {
-    position: absolute;
-    background: none;
-    color: white;
-    top: 10px;
-    right: 10px;
-
-}
-
 #navbar {
-  width: 10%; /* Initial width as a percentage */
+  width: 30px;
   height: 100%;
-  position: fixed;
-  z-index: 1;
   top: 0;
   left: 0;
-  background-color: #343a40; /* Bootstrap dark background color */
-  overflow-x: hidden;
-  transition: width 0.5s;
-}
-
-#navbar:hover, #navbar.show {
-  width: 20%; /* Expanded width as a percentage */
-}
-
-#navbar ul {
-  padding: 0;
-  list-style: none;
-}
-
-#navbar a {
-  text-decoration: none;
-  font-size: 14px; /* Adjusted font size */
-  color: white;
-  display: flex;
-  align-items: center; /* Center items vertically in the container */
-  padding: 10px; /* Adjusted padding */
-  transition: 0.3s;
-  white-space: nowrap; /* Prevent text from wrapping */
+  position: fixed;
+  background-color: black;
+  overflow: hidden;
+  transition: width .3s ease;
 }
 #navbar ul li {
   text-decoration: none;
-  font-size: 14px; /* Adjusted font size */
-  color: white;
+  list-style-type: none;
+  padding-bottom: 10px;
+  margin-left: 0px;
+}
+
+.label {
+  text-decoration: none;
+  list-style: none;
+  font-size: 20px; 
   display: flex;
-  align-items: center; /* Center items vertically in the container */
-  padding: 10px; /* Adjusted padding */
+  align-items: center; 
+  padding: 10px; 
   transition: 0.3s;
-  white-space: nowrap; /* Prevent text from wrapping */
-}
-
-#navbar a i {
-  font-size: 18px; /* Adjusted icon size */
-  margin-right: 8px; /* Adjusted margin */
-  margin-left: -5px;
-  padding-left: 0px;
-}
-
-#navbar a .label {
-  display: none; /* Initially hide labels */
-  margin-left: 8px; /* Adjusted margin */
-}
-
-#navbar:hover a .label {
-  display: inline; /* Show labels on hover */
-}
-
-#navbar a:hover {
-  color: #f1f1f1;
-}
-
-#openNav {
+  white-space: nowrap; 
   position: absolute;
-  background: none;
-  color: white;
-  top: 45%;
-  left: 10px;
+  width: 80px;
+  left: 0;
+  margin-left: -5px;
+  color: transparent;
+  user-select: none;
+  transition: color 0.3s ease, user-select 0.3s ease;
 }
 
-#customRange1 {
-  width: 80%; /* Adjusted width as a percentage */
-  margin: 10px 0; /* Added margin for spacing */
+.icon {
+  font-size: 20px;
+  text-decoration: none;
+  list-style: none;
+  margin-top: 30px;
+  margin-left: -35px;
+}
+#fontrange {
+  width: 20px;
+  margin-top: 30px;
+  margin-left: -35px;
+}
+a:hover {
+  text-decoration: none;
 }
 
 #summary {
@@ -159,6 +126,8 @@ body {
   transition: opacity 0.2 ease;
 }
 
+
+/*#region Animation CSS*/
 .lds-grid {
   display: none;
   position: absolute;
@@ -228,3 +197,4 @@ body {
     opacity: 0.5;
   }
 }
+/*#endregion*/

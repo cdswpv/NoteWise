@@ -81,25 +81,25 @@ function hideLoader() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+
+  document.getElementById("navbar").addEventListener('mouseover', function() {
+    console.log("moouseover");
+    openNav();
+    moveMenu();
+  });
+  
+  document.getElementById("navbar").addEventListener('mouseout', function() {
+    console.log("moouseout");
+    closeNav();
+    moveMenuBack();
+  });
   
   document.getElementById('myButton').addEventListener('click', function() {
     console.log('Button clicked');
     getText();
     hideButton();
     });
-  
-  document.getElementById('x').addEventListener('click', closeElement);
-
-  function closeElement() {
-    const element = document.getElementById('x');
-    element.style.display = 'none';
-    window.close();
-  }
-  
-  // Event listener for the openNav button
-  document.getElementById("openNav").addEventListener("click", openNav);
-  //document.getElementById("closeNav").addEventListener("click", closeNav);
-
+    
   //Button to copy text to clipboard 
   document.getElementById('copyButton').addEventListener('click', function () {
     // Get the text content from the 'summary' element
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
     generateSpeech(summaryText);
   });
   
-  var textSizeInput = document.getElementById('text-size');
+  var textSizeInput = document.getElementById('fontrange');
   var testElement = document.getElementById('test');
 
   textSizeInput.addEventListener('input', function () {
@@ -171,12 +171,8 @@ function showLoader() {
   isLoading = true;
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  
-})
-
 function updateFont() {
-  var selector = document.getElementById('font-style');
+  var selector = document.getElementById('fontrange');
   var family = selector.options[selector.selectedIndex].value;
   var text = document.getElementById('test')
   text.style.fontFamily = family;
@@ -186,53 +182,37 @@ function updateFont() {
 
 function openNav() {
   var navbar = document.getElementById("navbar");
-  var maxLabelWidth = getMaxLabelWidth();
+  var fontrange = document.getElementById("fontrange");
+  var labels = document.querySelectorAll(".label");
 
-  navbar.style.width = (50 + maxLabelWidth) + "px"; // 50px is the initial width
+  labels.forEach(function(label) {
+    label.style.color = "white";
+    label.style.userSelect = "auto";
+  });
+
+  fontrange.style.width = "80px";
+  navbar.style.width = "100px";
 }
 
-// Function to close the sliding navbar
 function closeNav() {
-  document.getElementById("navbar").style.width = "10%";
+  var navbar = document.getElementById("navbar");
+  var fontrange = document.getElementById("fontrange");
+  var labels = document.querySelectorAll(".label");
+
+  labels.forEach(function(label) {
+    label.style.color = "transparent";
+    label.style.userSelect = "none";
+  });
+
+  fontrange.style.width = "20px";
+  navbar.style.width = "30px";
 }
 
 function moveMenu() {
-  console.log('Faded');
-  var menu = document.getElementById('myButton');
-  menu.style.margin = "margin: 23% 34%";
+  
 }
 
 function moveMenuBack() {
-  console.log('Faded');
-  var menu = document.getElementById('myButton');
-  menu.style.margin = "23%";
+  
 }
 
-function getMaxLabelWidth() {
-  var labels = document.querySelectorAll("#navbar a .label");
-  var maxLabelWidth = 0;
-
-  labels.forEach(function(label) {
-    maxLabelWidth = Math.max(maxLabelWidth, label.offsetWidth);
-  });
-
-  return maxLabelWidth;
-}
-
-// Event listener for the openNav button
-document.getElementById("openNav").addEventListener('click', function() {
-  openNav();
-  moveMenu();
-});
-
-document.getElementById("navbar").addEventListener('mouseover', function() {
-  console.log("moouseover");
-  openNav();
-  moveMenu();
-});
-
-document.getElementById("navbar").addEventListener('mouseout', function() {
-  console.log("moouseout");
-  closeNav();
-  moveMenuBack();
-});
