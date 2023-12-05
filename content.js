@@ -207,10 +207,22 @@ function closeNav() {
 }
 
 function moveMenu() {
-  
+  var button = document.getElementById("myButton");
+  var summaryBox = document.getElementById("summary");
+
+  button.style.marginRight = "2.5px";
+
+  summaryBox.style.marginRight = "5px";
+  summaryBox.style.width = "190px";
 }
 
 function moveMenuBack() {
-  
+  var button = document.getElementById("myButton");
+  var summaryBox = document.getElementById("summary");
+
+  button.style.marginRight = "40px";
+
+  summaryBox.style.width = "225px";
+  summaryBox.style.marginRight = "25px";
 }
 

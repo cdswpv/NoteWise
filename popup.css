@@ -32,8 +32,11 @@ body {
 
   transition: all .5s;
 
-  top: 0%;
-  margin: 23%;
+  top: 0;
+  right: 0;
+  margin-top: 30px;
+  margin-right: 40px;
+  margin-left: 0px;
 
   border: .25em solid var(--back-grround-color);
   border-radius: 1em;
@@ -107,13 +110,17 @@ a:hover {
   max-height: 200px;  
   width: 225px;
   top: 45%;
-  margin: 5% 17.5%;
+  right: 0;
+  margin-top: 10px;
+  margin-right: 25px;
   position: absolute;
   overflow-y: auto;   
   white-space: pre-wrap; 
   border: 1px solid black; 
   padding: 10px;   
-  color: #f1f1f1;    
+  color: #f1f1f1;   
+  position: absolute; 
+  transition: all .5s;
 }
 
 .hidden {
