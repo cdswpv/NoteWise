@@ -72,6 +72,7 @@ async function generateSummary(text) {
   }  finally{
     isLoading = false;
     hideLoader();
+    updateFont();
   }
 }
 
@@ -116,7 +117,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.body.removeChild(tempTextarea);
 
-    alert('Text copied to clipboard!');
   });
 
   //text to speech 
@@ -126,12 +126,15 @@ document.addEventListener('DOMContentLoaded', function() {
     generateSpeech(summaryText);
   });
   
-  var textSizeInput = document.getElementById('fontrange');
-  var testElement = document.getElementById('test');
 
-  textSizeInput.addEventListener('input', function () {
-    testElement.style.fontSize = this.value + "px";
-  })
+  function updateFont(){
+    var textSizeInput = document.getElementById('fontrange');
+    var testElement = document.getElementById('summary');
+  
+    textSizeInput.addEventListener('input', function () {
+      testElement.style.fontSize = this.value + "px";
+    });
+  }
 
   async function generateSpeech(text) {
     try {
@@ -172,12 +175,7 @@ function showLoader() {
 }
 
 function updateFont() {
-  var selector = document.getElementById('fontrange');
-  var family = selector.options[selector.selectedIndex].value;
-  var text = document.getElementById('test')
-  text.style.fontFamily = family;
-
-  selector.addEventListener('input')
+  
 }
 
 function openNav() {
