@@ -192,12 +192,19 @@ function updateSummaryBox() {
 function openNav() {
   var navbar = document.getElementById("navbar");
   var fontrange = document.getElementById("fontrange");
+  var policy = document.getElementById("policy");
   var labels = document.querySelectorAll(".label");
 
+
+  
   labels.forEach(function(label) {
     label.style.color = "white";
     label.style.userSelect = "auto";
   });
+
+  policy.style.color = "inherit";
+  policy.style.userSelect = "auto";
+
 
   fontrange.style.width = "80px";
   navbar.style.width = "100px";
@@ -206,12 +213,16 @@ function openNav() {
 function closeNav() {
   var navbar = document.getElementById("navbar");
   var fontrange = document.getElementById("fontrange");
+  var policy = document.getElementById("policy");
   var labels = document.querySelectorAll(".label");
 
   labels.forEach(function(label) {
     label.style.color = "transparent";
     label.style.userSelect = "none";
   });
+
+  policy.style.color = "transparent";
+  policy.style.userSelect = "none";
 
   fontrange.style.width = "20px";
   navbar.style.width = "30px";

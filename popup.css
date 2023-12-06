@@ -78,29 +78,54 @@ body {
   font-size: 20px; 
   display: flex;
   align-items: center; 
-  padding: 10px; 
+  padding: 0;
+  padding-left: 10px;
   transition: 0.3s;
   white-space: nowrap; 
   position: absolute;
   width: 80px;
   left: 0;
+  margin-top: 0;
   margin-left: -5px;
+  letter-spacing: 1.5px;
   color: transparent;
   user-select: none;
   transition: color 0.3s ease, user-select 0.3s ease;
 }
 
 .icon {
-  font-size: 20px;
+  font-size: 25px;
   text-decoration: none;
   list-style: none;
-  margin-top: 30px;
+  margin-top: 16px;
   margin-left: -35px;
+}
+#loginIcon {
+  font-size: 20px;
+}
+#ttsIcon {
+  font-size: 20px;
 }
 #fontrange {
   width: 20px;
-  margin-top: 30px;
+  margin-top: 15px;
   margin-left: -35px;
+  transition: width 0.3s ease;
+}
+#policy {
+  font-size: 20px;
+  left: 0;
+  width: 80px;
+  padding: 0px;
+  padding-left: 10px;
+  margin-left: -5px;
+  letter-spacing: 1.5px;
+  align-items: center;
+  transition: .3s;
+  white-space: nowrap;
+  position: absolute;
+  text-decoration: underline;
+  color: transparent;
 }
 a:hover {
   text-decoration: none;
