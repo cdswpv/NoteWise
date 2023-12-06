@@ -116,7 +116,8 @@ a:hover {
   position: absolute;
   overflow-y: auto;   
   white-space: pre-wrap; 
-  border: 1px solid black; 
+  border: 1px solid rgb(255, 255, 255); 
+  border-color: #f1f1f1;
   padding: 10px;   
   color: #f1f1f1;   
   position: absolute; 
@@ -138,8 +139,8 @@ a:hover {
 .lds-grid {
   display: none;
   position: absolute;
-  top: 50;
-  left: 50;
+  top: 20%;
+  left: 40%;
   width: 20px;
   height: 80px;
 }

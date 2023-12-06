@@ -73,6 +73,7 @@ async function generateSummary(text) {
     isLoading = false;
     hideLoader();
     updateFont();
+    updateSummaryBox();
   }
 }
 
@@ -166,6 +167,7 @@ function hideButton() {
   console.log('Hiding button');
   var button = document.getElementById('myButton');
   button.classList.add('hidden');
+  button.disabled = true;
 }
 
 function showLoader() {
@@ -174,8 +176,17 @@ function showLoader() {
   isLoading = true;
 }
 
-function updateFont() {
-  
+function updateFont(){
+  var textSizeInput = document.getElementById('fontrange');
+  var testElement = document.getElementById('summary');
+  textSizeInput.addEventListener('input', function () {
+    testElement.style.fontSize = this.value + "px";
+  });
+}
+function updateSummaryBox() {
+  const menuBox = document.getElementById('summary');
+  menuBox.style.top = "5%";
+  menuBox.style.height = "100%"
 }
 
 function openNav() {
