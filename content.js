@@ -101,7 +101,11 @@ document.addEventListener('DOMContentLoaded', function() {
     getText();
     hideButton();
     });
-    
+  
+  document.getElementById("policy").addEventListener('click', function() {
+    console.log("Privacy Policy clicked");
+    openPrivacyPolicy();
+  })
   //Button to copy text to clipboard 
   document.getElementById('copyButton').addEventListener('click', function () {
     // Get the text content from the 'summary' element
@@ -168,6 +172,10 @@ function hideButton() {
   var button = document.getElementById('myButton');
   button.classList.add('hidden');
   button.disabled = true;
+}
+
+function openPrivacyPolicy(){
+  chrome.tabs.create({ url: 'https://docs.google.com/document/d/14c187OtIV8xpiyk7VZfIg91A1JKc1QLdLvKh0P_r7u0/edit?usp=sharing' });
 }
 
 function showLoader() {
