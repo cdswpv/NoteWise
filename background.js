@@ -30,7 +30,6 @@ chrome.runtime.onInstalled.addListener(() => {
       if (info.menuItemId === "text") {
           console.log("Selected Text: " + info.selectionText);
           generateSummary(info.selectionText);
-          console.log("summarizing");
       } else if (info.menuItemId === "image") {
           console.log("Image URL: " + info.srcUrl);
           generateImageSummary(info.srcUrl);
@@ -48,21 +47,21 @@ chrome.runtime.onInstalled.addListener(() => {
   function createOverlay() {
     overlayDiv = document.createElement('div');
     overlayDiv.id = 'customOverlay';
-    overlayDiv.style.cssText = 'position: fixed; top: 0; left: 0; width: 600px; height: 300px; border: 2px solid #000; background-color: #FFF; padding: 0; user-select: none; cursor: move; z-index: 999; overflow:auto';
+    overlayDiv.style.cssText = 'position: fixed; top: 0; left: 0; width: 600px; height: 300px; border: 2px solid #000; background-color: #222226; padding: 0; user-select: none; cursor: move; z-index: 999; overflow:auto';
 
     // Header
     header = document.createElement('div');
-    header.style.cssText = 'background-color: #333; color: #FFF; padding: 10px; display: flex; justify-content: space-between; align-items: center;';
+    header.style.cssText = 'background-color: #333; color: #FFF; padding: 10px; display: flex; align-items: center;';
 
     // Title in the header
     title = document.createElement('div');
     title.innerText = 'NoteWise Summarization';
-    title.style.cssText = 'font-size: 16px; font-weight: bold;';
+    title.style.cssText = 'font-size: 16px; font-weight: bold; margin-right: 240px;';
 
     // Add a TTS button
     ttsButton = document.createElement('button');
     ttsButton.innerText = 'TTS';
-    ttsButton.style.cssText = 'padding: 5px; cursor: pointer;';
+    ttsButton.style.cssText = 'padding: 5px; cursor: pointer; background-color: #222226; color: white; margin-left: 5px;';
     ttsButton.style.marginRight = '0'
     ttsButton.addEventListener('click', () => {
         console.log('TTS button clicked');
@@ -82,7 +81,7 @@ chrome.runtime.onInstalled.addListener(() => {
     // Add a Copy button
     copyButton = document.createElement('button');
     copyButton.innerText = 'Copy';
-    copyButton.style.cssText = 'padding: 5px; cursor: pointer;';
+    copyButton.style.cssText = 'padding: 5px; cursor: pointer; background-color: #222226; color: white; margin-left: 5px;';
     copyButton.addEventListener('click', () => {
         const textSection = document.getElementById('textSection');
         if (textSection) {
@@ -98,7 +97,7 @@ chrome.runtime.onInstalled.addListener(() => {
     // Add a close button
     closeButton = document.createElement('button');
     closeButton.innerText = 'Close';
-    closeButton.style.cssText = 'padding: 5px; cursor: pointer;';
+    closeButton.style.cssText = 'padding: 5px; cursor: pointer; background-color: #222226; color: white; margin-left: 5px;';
     closeButton.addEventListener('click', () => {
         document.body.removeChild(overlayDiv);
     });
