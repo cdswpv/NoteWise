@@ -85,25 +85,25 @@ function hideLoader() {
 document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById("navbar").addEventListener('mouseover', function() {
-    console.log("moouseover");
+   // console.log("moouseover");
     openNav();
     moveMenu();
   });
   
   document.getElementById("navbar").addEventListener('mouseout', function() {
-    console.log("moouseout");
+   // console.log("moouseout");
     closeNav();
     moveMenuBack();
   });
   
   document.getElementById('myButton').addEventListener('click', function() {
-    console.log('Button clicked');
+   // console.log('Button clicked');
     getText();
     hideButton();
     });
   
   document.getElementById("policy").addEventListener('click', function() {
-    console.log("Privacy Policy clicked");
+   // console.log("Privacy Policy clicked");
     openPrivacyPolicy();
   })
   //Button to copy text to clipboard 
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 function hideButton() {
-  console.log('Hiding button');
+ // console.log('Hiding button');
   var button = document.getElementById('myButton');
   button.classList.add('hidden');
   button.disabled = true;
