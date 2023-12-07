@@ -197,6 +197,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
     sendResponse(true);
   }
+  /*
   else if (request.message === 'get_profile')
   {
     chrome.identity.getAuthToken({accountStatus: 'ANY'}, function(user_info)
@@ -204,7 +205,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       console.log(user_info);
     });
     sendResponse(true);
-  }
+  } */
+
+  /*
   else if (request.message === 'get_contacts')
   {
     chrome.identity.getAuthToken({interactive: true}, function(token)
@@ -236,6 +239,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
     });
   }
+  */
 });
 
 //#endregion
@@ -331,4 +335,5 @@ function playAudio(url) {
   audio.play().catch(e => console.error('Error playing audio:', e));
   console.log("Audio played");
 }
+
 //#endregion
