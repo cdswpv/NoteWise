@@ -44,79 +44,85 @@ chrome.runtime.onInstalled.addListener(() => {
 //#endregion
 
 //#region Overlay Code
+
+let overlayDiv = null; 
+
   function createOverlay() {
-    overlayDiv = document.createElement('div');
-    overlayDiv.id = 'customOverlay';
-    overlayDiv.style.cssText = 'position: fixed; top: 0; left: 0; width: 600px; height: 300px; border: 2px solid #000; background-color: #222226; padding: 0; user-select: none; cursor: move; z-index: 999; overflow:auto';
+    if (!window.overlayDiv) 
+    {    
+      overlayDiv = document.createElement('div');
+      overlayDiv.id = 'customOverlay';
+      overlayDiv.style.cssText = 'position: fixed; top: 0; left: 0; width: 600px; height: 300px; border: 2px solid #000; background-color: #222226; padding: 0; user-select: none; cursor: move; z-index: 999; overflow:auto';
 
-    // Header
-    header = document.createElement('div');
-    header.style.cssText = 'background-color: #333; color: #FFF; padding: 10px; display: flex; align-items: center;';
+      // Header
+      header = document.createElement('div');
+      header.style.cssText = 'background-color: #333; color: #FFF; padding: 10px; display: flex; align-items: center;';
 
-    // Title in the header
-    title = document.createElement('div');
-    title.innerText = 'NoteWise Summarization';
-    title.style.cssText = 'font-size: 16px; font-weight: bold; margin-right: 240px;';
+      // Title in the header
+      title = document.createElement('div');
+      title.innerText = 'NoteWise Summarization';
+      title.style.cssText = 'font-size: 16px; font-weight: bold; margin-right: 240px;';
 
-    // Add a TTS button
-    ttsButton = document.createElement('button');
-    ttsButton.innerText = 'TTS';
-    ttsButton.style.cssText = 'padding: 5px; cursor: pointer; background-color: #222226; color: white; margin-left: 5px;';
-    ttsButton.style.marginRight = '0'
-    ttsButton.addEventListener('click', () => {
-        console.log('TTS button clicked');
-        const textSection = document.getElementById('textSection');
-        if (textSection)
-        {
-          console.log("text section exists")
-          if (textSection.innerText != "Waiting for response...")
+      // Add a TTS button
+      ttsButton = document.createElement('button');
+      ttsButton.innerText = 'TTS';
+      ttsButton.style.cssText = 'padding: 5px; cursor: pointer; background-color: #222226; color: white; margin-left: 5px;';
+      ttsButton.style.marginRight = '0'
+      ttsButton.addEventListener('click', () => {
+          console.log('TTS button clicked');
+          const textSection = document.getElementById('textSection');
+          if (textSection)
           {
-            const text = textSection.innerText;
-            console.log("sending to generate audio")
-            generateSpeech(text)
+            console.log("text section exists")
+            if (textSection.innerText != "Waiting for response...")
+            {
+              const text = textSection.innerText;
+              console.log("sending to generate audio")
+              generateSpeech(text)
+            }
           }
-        }
-    });
+      });
 
-    // Add a Copy button
-    copyButton = document.createElement('button');
-    copyButton.innerText = 'Copy';
-    copyButton.style.cssText = 'padding: 5px; cursor: pointer; background-color: #222226; color: white; margin-left: 5px;';
-    copyButton.addEventListener('click', () => {
-        const textSection = document.getElementById('textSection');
-        if (textSection) {
-            const textToCopy = textSection.innerText;
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                console.log('Text copied to clipboard');
-            }).catch((err) => {
-                console.error('Unable to copy text to clipboard', err);
-            });
-        }
-    });
+      // Add a Copy button
+      copyButton = document.createElement('button');
+      copyButton.innerText = 'Copy';
+      copyButton.style.cssText = 'padding: 5px; cursor: pointer; background-color: #222226; color: white; margin-left: 5px;';
+      copyButton.addEventListener('click', () => {
+          const textSection = document.getElementById('textSection');
+          if (textSection) {
+              const textToCopy = textSection.innerText;
+              navigator.clipboard.writeText(textToCopy).then(() => {
+                  console.log('Text copied to clipboard');
+              }).catch((err) => {
+                  console.error('Unable to copy text to clipboard', err);
+              });
+          }
+      });
 
-    // Add a close button
-    closeButton = document.createElement('button');
-    closeButton.innerText = 'Close';
-    closeButton.style.cssText = 'padding: 5px; cursor: pointer; background-color: #222226; color: white; margin-left: 5px;';
-    closeButton.addEventListener('click', () => {
-        document.body.removeChild(overlayDiv);
-    });
-    // Section area for text
-    textSection = document.createElement('div');
-    textSection.id = 'textSection';
-    textSection.innerText = 'Waiting for response...';
-    textSection.style.cssText = 'padding: 10px; color: white;';
+      // Add a close button
+      closeButton = document.createElement('button');
+      closeButton.innerText = 'Close';
+      closeButton.style.cssText = 'padding: 5px; cursor: pointer; background-color: #222226; color: white; margin-left: 5px;';
+      closeButton.addEventListener('click', () => {
+          document.body.removeChild(overlayDiv);
+      });
+      // Section area for text
+      textSection = document.createElement('div');
+      textSection.id = 'textSection';
+      textSection.innerText = 'Waiting for response...';
+      textSection.style.cssText = 'padding: 10px; color: white;';
 
-    overlayDiv.appendChild(header);
-    header.appendChild(title);
-    header.appendChild(ttsButton);
-    header.appendChild(copyButton);
-    header.appendChild(closeButton);
-    overlayDiv.appendChild(textSection);
+      overlayDiv.appendChild(header);
+      header.appendChild(title);
+      header.appendChild(ttsButton);
+      header.appendChild(copyButton);
+      header.appendChild(closeButton);
+      overlayDiv.appendChild(textSection);
 
-    document.body.appendChild(overlayDiv);
+      document.body.appendChild(overlayDiv);
 
-    makeOverlayDraggable(overlayDiv);
+      makeOverlayDraggable(overlayDiv);
+    }
 } 
   function makeOverlayDraggable(overlayDiv) {
     let isDragging = false;
