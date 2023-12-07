@@ -5,6 +5,7 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
+
 //#region ContextMenus
 
 chrome.runtime.onInstalled.addListener(() => {
